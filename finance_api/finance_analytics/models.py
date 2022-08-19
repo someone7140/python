@@ -18,6 +18,13 @@ class CompanyFinance(models.Model):
     total_revenue = models.BigIntegerField(db_index=True)
     operating_income = models.BigIntegerField(db_index=True)
     net_income = models.BigIntegerField(db_index=True)
+    assets = models.BigIntegerField(db_index=True)
+    liabilities = models.BigIntegerField(db_index=True)
+    equities = models.BigIntegerField(db_index=True)
+    operating_cf = models.BigIntegerField(db_index=True)
+    investment_cf = models.BigIntegerField(db_index=True)
+    finance_cf = models.BigIntegerField(db_index=True)
+    stock_price = models.BigIntegerField(db_index=True)
     update_date = models.DateTimeField()
 
     class Meta:

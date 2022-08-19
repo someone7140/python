@@ -15,6 +15,13 @@ def insert_finance_info_list(finance_info_list: list[FinanceByYear], company_cod
             total_revenue=finance_info.total_revenue,
             operating_income=finance_info.operating_income,
             net_income=finance_info.net_income,
+            assets=finance_info.assets,
+            liabilities=finance_info.liabilities,
+            equities=finance_info.equities,
+            operating_cf=finance_info.operating_cf,
+            investment_cf=finance_info.investment_cf,
+            finance_cf=finance_info.finance_cf,
+            stock_price=finance_info.stock_price,
             update_date=update_date
         ))
     CompanyFinance.objects.bulk_create(add_finance_list)
