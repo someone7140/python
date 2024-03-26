@@ -1,0 +1,7 @@
+Django==5.0.3
+django-environ==0.11.2
+mongoengine==0.28.2
+mongoengine-migrate==0.0.3
+graphene-django==3.2.0
+returns===0.22.0
+graphql-core===3.2.3
