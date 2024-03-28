@@ -5,7 +5,7 @@ from returns.result import Result, Failure
 from placeNoteApi2024.service.account_user_service import (
     add_account_user_by_google_service,
 )
-from placeNoteApi2024.graphql.graphene_object import AddAccountUserResponse
+from placeNoteApi2024.graphql.strawberry_object import AddAccountUserResponse
 
 
 def add_account_user_by_google(

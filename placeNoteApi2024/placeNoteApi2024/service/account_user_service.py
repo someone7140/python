@@ -2,7 +2,7 @@ from mongoengine import *
 from graphql import GraphQLError
 from returns.result import Result, Failure, Success
 
-from placeNoteApi2024.graphql.graphene_object import AddAccountUserResponse
+from placeNoteApi2024.graphql.strawberry_object import AddAccountUserResponse
 from placeNoteApi2024.repository.account_user_repository import (
     add_user_account,
     get_user_accounts_by_query,
@@ -24,4 +24,4 @@ def add_account_user_by_google_service(
         )
 
     account_user = add_user_account(user_setting_id, name, gmail)
-    return Success(AddAccountUserResponse(token=account_user.id))
+    return Success(AddAccountUserResponse(token=account_user._id))
