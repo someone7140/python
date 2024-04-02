@@ -5,3 +5,4 @@ mongoengine-migrate==0.0.3
 returns===0.22.0
 strawberry-graphql-django===0.35.1
 graphql-core===3.2.3
+pyjwt===2.8.0

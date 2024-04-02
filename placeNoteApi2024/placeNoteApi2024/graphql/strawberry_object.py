@@ -8,5 +8,10 @@ class GetAccountUserByTokenResponse:
 
 
 @strawberry.type
+class GoogleAuthCodeVerifyResponse:
+    token: str
+
+
+@strawberry.type
 class AddAccountUserResponse:
     token: str

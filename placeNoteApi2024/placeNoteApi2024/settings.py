@@ -19,23 +19,23 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 target_env = os.getenv("TARGET_ENV")
-env = environ.Env()
+ENV = environ.Env()
 
 if target_env == None:
-    env.read_env(os.path.join(BASE_DIR, ".env"))
+    ENV.read_env(os.path.join(BASE_DIR, ".env"))
 else:
-    env.read_env(os.path.join(BASE_DIR, ".env." + target_env))
+    ENV.read_env(os.path.join(BASE_DIR, ".env." + target_env))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.get_value("APP_SECRET")
+SECRET_KEY = ENV.get_value("APP_SECRET")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.get_value("DEBUG") == "True"
+DEBUG = ENV.get_value("DEBUG") == "True"
 
-ALLOWED_HOSTS = [env.get_value("ALLOWED_HOSTS")]
+ALLOWED_HOSTS = [ENV.get_value("ALLOWED_HOSTS")]
 
 
 # Application definition
@@ -83,10 +83,10 @@ WSGI_APPLICATION = "placeNoteApi2024.wsgi.application"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 mongoengine.connect(
-    db=env.get_value("DB_NAME"),
-    host=env.get_value("DB_HOST"),
-    username=env.get_value("DB_USER"),
-    password=env.get_value("DB_PASSWORD"),
+    db=ENV.get_value("DB_NAME"),
+    host=ENV.get_value("DB_HOST"),
+    username=ENV.get_value("DB_USER"),
+    password=ENV.get_value("DB_PASSWORD"),
 )
 # DATABASES = {
 #    "default": {
