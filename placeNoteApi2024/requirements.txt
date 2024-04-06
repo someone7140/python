@@ -6,3 +6,5 @@ returns===0.22.0
 strawberry-graphql-django===0.35.1
 graphql-core===3.2.3
 pyjwt===2.8.0
+google-api-python-client===2.125.0
+google-auth-oauthlib===1.2.0

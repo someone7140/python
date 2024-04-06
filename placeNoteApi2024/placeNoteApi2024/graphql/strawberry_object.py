@@ -15,3 +15,5 @@ class GoogleAuthCodeVerifyResponse:
 @strawberry.type
 class AddAccountUserResponse:
     token: str
+    user_setting_id: str
+    name: str
