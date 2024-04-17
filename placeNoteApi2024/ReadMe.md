@@ -1,2 +1,3 @@
 - `pip install -r requirements.txt`で各種ライブラリをインストール。
 - db の migration は`placeNoteApi2024/placeNoteApi2024`配下でコマンド実行。ファイル作成は`mongoengine_migrate makemigrations`、反映は`mongoengine_migrate -u mongodb://localhost:27017/place_note_db_local migrate`のような感じ。
+- `env TARGET_ENV=local strawberry export-schema placeNoteApi2024.schema --output schema.graphql`で graphql ファイルを出力

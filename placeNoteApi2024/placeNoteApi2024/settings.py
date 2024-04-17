@@ -14,6 +14,7 @@ import environ
 import mongoengine
 import os
 from pathlib import Path
+from urllib.parse import urlparse
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -35,12 +36,12 @@ SECRET_KEY = ENV.get_value("APP_SECRET")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = ENV.get_value("DEBUG") == "True"
 
-ALLOWED_HOSTS = [ENV.get_value("ALLOWED_HOSTS")]
-
+ALLOWED_HOSTS = [ENV.get_value("OWN_HOST")]
 
 # Application definition
 
 INSTALLED_APPS = [
+    "corsheaders",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -57,6 +58,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
 ]
 
 ROOT_URLCONF = "placeNoteApi2024.urls"
@@ -136,3 +139,7 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CORS_ORIGIN_WHITELIST = [ENV.get_value("FRONTEND_DOMAIN")]
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True

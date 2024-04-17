@@ -1,0 +1,24 @@
+schema {
+  query: PlaceNoteQuery
+  mutation: PlaceNoteMutation
+}
+
+type AccountUserResponse {
+  token: String!
+  userSettingId: String!
+  name: String!
+}
+
+type GoogleAuthCodeVerifyResponse {
+  token: String!
+}
+
+type PlaceNoteMutation {
+  googleAuthCodeVerify(authCode: String!): GoogleAuthCodeVerifyResponse!
+  addAccountUserByGoogle(userSettingId: String!, name: String!, authToken: String!): AccountUserResponse!
+  loginByGoogleAuthCode(authCode: String!): AccountUserResponse!
+}
+
+type PlaceNoteQuery {
+  getAccountUserByToken: AccountUserResponse!
+}
