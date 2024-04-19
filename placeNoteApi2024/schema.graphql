@@ -17,8 +17,21 @@ type PlaceNoteMutation {
   googleAuthCodeVerify(authCode: String!): GoogleAuthCodeVerifyResponse!
   addAccountUserByGoogle(userSettingId: String!, name: String!, authToken: String!): AccountUserResponse!
   loginByGoogleAuthCode(authCode: String!): AccountUserResponse!
+  addPostCategory(name: String!, parentCategoryId: String, displayOrder: Int, memo: String): Boolean!
+  editPostCategory(id: String!, name: String!, parentCategoryId: String, displayOrder: Int, memo: String): Boolean!
+  deletePostCategory(id: String!): Boolean!
 }
 
 type PlaceNoteQuery {
   getAccountUserByToken: AccountUserResponse!
+  getMyPostCategories(nameFilter: String): [PostCategoryResponse!]!
+}
+
+type PostCategoryResponse {
+  id: String!
+  userAccountId: String!
+  name: String!
+  parentCategoryId: String
+  displayOrder: Int
+  memo: String
 }

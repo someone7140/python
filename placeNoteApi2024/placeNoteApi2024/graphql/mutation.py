@@ -6,9 +6,17 @@ from placeNoteApi2024.controller.account_user_controller import (
     google_auth_code_verify_handler,
     login_by_google_auth_code_handler,
 )
+from placeNoteApi2024.controller.post.post_category_contoroller import (
+    add_post_category_handler,
+    delete_post_category_handler,
+    edit_post_category_handler,
+)
 from placeNoteApi2024.graphql.strawberry_object import (
     AccountUserResponse,
     GoogleAuthCodeVerifyResponse,
+)
+from placeNoteApi2024.service.account_user_service import (
+    get_user_account_id_from_context_dict,
 )
 
 
@@ -35,6 +43,56 @@ class PlaceNoteMutation:
     @strawberry.mutation
     def login_by_google_auth_code(auth_code: str) -> AccountUserResponse:
         result = login_by_google_auth_code_handler(auth_code)
+        if is_successful(result):
+            return result.unwrap()
+        else:
+            return result.failure()
+
+    @strawberry.mutation
+    def add_post_category(
+        self,
+        info: strawberry.Info,
+        name: str,
+        parent_category_id: str | None,
+        display_order: int | None,
+        memo: str | None,
+    ) -> bool:
+        user_account_id = get_user_account_id_from_context_dict(info.context)
+        result = add_post_category_handler(
+            user_account_id, name, parent_category_id, display_order, memo
+        )
+        if is_successful(result):
+            return result.unwrap()
+        else:
+            return result.failure()
+
+    @strawberry.mutation
+    def edit_post_category(
+        self,
+        info: strawberry.Info,
+        id: str,
+        name: str,
+        parent_category_id: str | None,
+        display_order: int | None,
+        memo: str | None,
+    ) -> bool:
+        user_account_id = get_user_account_id_from_context_dict(info.context)
+        result = edit_post_category_handler(
+            id, user_account_id, name, parent_category_id, display_order, memo
+        )
+        if is_successful(result):
+            return result.unwrap()
+        else:
+            return result.failure()
+
+    @strawberry.mutation
+    def delete_post_category(
+        self,
+        info: strawberry.Info,
+        id: str,
+    ) -> bool:
+        user_account_id = get_user_account_id_from_context_dict(info.context)
+        result = delete_post_category_handler(id, user_account_id)
         if is_successful(result):
             return result.unwrap()
         else:
