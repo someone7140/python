@@ -16,7 +16,7 @@ class AccountUserResponse:
 @strawberry.type
 class PostCategoryResponse:
     id: str
-    user_account_id: str
+    user_setting_id: str
     name: str
     parent_category_id: str | None
     display_order: int | None

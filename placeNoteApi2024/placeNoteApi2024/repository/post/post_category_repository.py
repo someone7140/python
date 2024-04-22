@@ -4,8 +4,12 @@ import uuid
 
 from mongoengine import *
 
+from placeNoteApi2024.graphql.strawberry_object import PostCategoryResponse
 from placeNoteApi2024.models import PostCategory
-from placeNoteApi2024.service_model.post_service_model import PostCategoryServiceModel
+from placeNoteApi2024.service_model.post_service_model import (
+    PostCategoryQueryServiceModel,
+    PostCategoryServiceModel,
+)
 
 
 def add_post_category(add_category: PostCategoryServiceModel) -> PostCategory:
@@ -69,7 +73,7 @@ def delete_category_by_id(
 
 def find_post_categories(
     user_account_id: str, name_filter: str | None
-) -> List[PostCategory]:
+) -> List[PostCategoryQueryServiceModel]:
     pipeline = [
         {"$match": {"create_user_account_id": user_account_id}},
         {
@@ -79,10 +83,19 @@ def find_post_categories(
             "$sort": {"sort_field": 1},
         },
         {
+            "$lookup": {
+                "from": "user_accounts",
+                "localField": "create_user_account_id",
+                "foreignField": "_id",
+                "as": "user_accounts",
+            }
+        },
+        {"$unwind": "$user_accounts"},
+        {
             "$project": {
                 "_id": 1,
                 "name": 1,
-                "create_user_account_id": 1,
+                "user_setting_id": "$user_accounts.user_setting_id",
                 "parent_category_id": 1,
                 "memo": 1,
                 "display_order": 1,
@@ -96,7 +109,7 @@ def find_post_categories(
 
     return list(
         map(
-            lambda c_dict: PostCategory(**c_dict),
+            lambda c_dict: PostCategoryQueryServiceModel(**c_dict),
             list(PostCategory.objects().aggregate(pipeline)),
         )
     )

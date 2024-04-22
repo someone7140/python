@@ -29,7 +29,7 @@ type PlaceNoteQuery {
 
 type PostCategoryResponse {
   id: String!
-  userAccountId: String!
+  userSettingId: String!
   name: String!
   parentCategoryId: String
   displayOrder: Int

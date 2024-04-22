@@ -48,7 +48,7 @@ def get_my_post_categories_service(
             map(
                 lambda c: PostCategoryResponse(
                     id=c._id,
-                    user_account_id=c.create_user_account_id,
+                    user_setting_id=c.user_setting_id,
                     name=c.name,
                     parent_category_id=c.parent_category_id,
                     display_order=c.display_order,

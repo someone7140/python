@@ -22,7 +22,6 @@ def add_post_category_handler(
 ) -> Result[bool, GraphQLError]:
     try:
         add_category = PostCategoryServiceModel(
-            id=None,
             user_account_id=user_account_id,
             name=name,
             parent_category_id=parent_category_id,
@@ -44,7 +43,6 @@ def edit_post_category_handler(
 ) -> Result[bool, GraphQLError]:
     try:
         edit_category = PostCategoryServiceModel(
-            id=id,
             user_account_id=user_account_id,
             name=name,
             parent_category_id=parent_category_id,
