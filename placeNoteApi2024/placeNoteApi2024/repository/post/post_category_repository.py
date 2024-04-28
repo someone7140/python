@@ -40,12 +40,12 @@ def edit_post_category(
         return False
 
     before_update_category = result_list[0]
-    before_update_category.update(
-        name=edit_category.name,
-        parent_category_id=edit_category.parent_category_id,
-        display_order=edit_category.display_order,
-        memo=edit_category.memo,
-    )
+    before_update_category.name = edit_category.name
+    before_update_category.parent_category_id = edit_category.parent_category_id
+    before_update_category.display_order = edit_category.display_order
+    before_update_category.memo = edit_category.memo
+
+    before_update_category.save()
     return True
 
 
@@ -53,13 +53,14 @@ def delete_category_by_id(
     category_id: str,
     user_account_id: str,
 ) -> bool:
-    # 配下のカテゴリーを削除
-    delete_categories_by_query(
+    # 配下のカテゴリーの親カテゴリーをnullにする
+    PostCategory.objects(
         Q(parent_category_id=category_id)
         & Q(
             create_user_account_id=user_account_id,
         )
-    )
+    ).update(parent_category_id=None)
+
     # 自身を削除
     delete_categories_by_query(
         Q(_id=category_id)
@@ -72,7 +73,9 @@ def delete_category_by_id(
 
 
 def find_post_categories(
-    user_account_id: str, name_filter: str | None
+    user_account_id: str,
+    id_filter: str | None,
+    name_filter: str | None,
 ) -> List[PostCategoryQueryServiceModel]:
     pipeline = [
         {"$match": {"create_user_account_id": user_account_id}},
@@ -102,6 +105,9 @@ def find_post_categories(
             }
         },
     ]
+
+    if id_filter != None:
+        pipeline.insert(0, {"$match": {"_id": id_filter}})
     if name_filter != None:
         pipeline.insert(
             0, {"$match": {"name", {"$regex": name_filter, "$options": "i"}}}

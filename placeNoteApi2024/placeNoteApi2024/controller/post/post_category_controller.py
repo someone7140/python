@@ -1,7 +1,7 @@
 from typing import List
 from mongoengine import *
 from graphql import GraphQLError
-from returns.result import Result, Failure
+from returns.result import Result, Failure, Success
 
 from placeNoteApi2024.graphql.strawberry_object import PostCategoryResponse
 from placeNoteApi2024.service.post_service.post_category_service import (
@@ -43,6 +43,7 @@ def edit_post_category_handler(
 ) -> Result[bool, GraphQLError]:
     try:
         edit_category = PostCategoryServiceModel(
+            id=id,
             user_account_id=user_account_id,
             name=name,
             parent_category_id=parent_category_id,
@@ -64,10 +65,26 @@ def delete_post_category_handler(
         return Failure(GraphQLError(message=str(e), extensions={"code": 500}))
 
 
-def get_my_post_categories_handler(
+def get_post_categories_handler(
     user_account_id: str, name_filter: str | None
 ) -> Result[List[PostCategoryResponse], GraphQLError]:
     try:
-        return get_my_post_categories_service(user_account_id, name_filter)
+        return get_my_post_categories_service(user_account_id, None, name_filter)
+    except Exception as e:
+        return Failure(GraphQLError(message=str(e), extensions={"code": 500}))
+
+
+def get_post_category_by_id_handler(
+    user_account_id: str, id_filter: str
+) -> Result[PostCategoryResponse, GraphQLError]:
+    try:
+        results = get_my_post_categories_service(
+            user_account_id, id_filter, None
+        ).unwrap()
+
+        if len(results) > 0:
+            return Success(results[0])
+        else:
+            return Failure(GraphQLError(message=str(e), extensions={"code": 404}))
     except Exception as e:
         return Failure(GraphQLError(message=str(e), extensions={"code": 500}))

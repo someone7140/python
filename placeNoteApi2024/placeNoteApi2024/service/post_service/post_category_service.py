@@ -41,7 +41,7 @@ def delete_post_category_service(
 
 
 def get_my_post_categories_service(
-    user_account_id: str, name_filter: str | None
+    user_account_id: str, id_filter: str | None, name_filter: str | None
 ) -> Result[List[PostCategoryResponse], GraphQLError]:
     return Success(
         list(
@@ -54,7 +54,7 @@ def get_my_post_categories_service(
                     display_order=c.display_order,
                     memo=c.memo,
                 ),
-                find_post_categories(user_account_id, name_filter),
+                find_post_categories(user_account_id, id_filter, name_filter),
             )
         )
     )

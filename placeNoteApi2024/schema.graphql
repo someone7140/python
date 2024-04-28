@@ -25,6 +25,7 @@ type PlaceNoteMutation {
 type PlaceNoteQuery {
   getAccountUserByToken: AccountUserResponse!
   getMyPostCategories(nameFilter: String): [PostCategoryResponse!]!
+  getMyPostCategoryById(idFilter: String!): PostCategoryResponse!
 }
 
 type PostCategoryResponse {

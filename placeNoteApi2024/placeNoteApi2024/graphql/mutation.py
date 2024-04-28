@@ -6,7 +6,7 @@ from placeNoteApi2024.controller.account_user_controller import (
     google_auth_code_verify_handler,
     login_by_google_auth_code_handler,
 )
-from placeNoteApi2024.controller.post.post_category_contoroller import (
+from placeNoteApi2024.controller.post.post_category_controller import (
     add_post_category_handler,
     delete_post_category_handler,
     edit_post_category_handler,
