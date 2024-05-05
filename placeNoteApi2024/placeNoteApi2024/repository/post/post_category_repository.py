@@ -123,3 +123,15 @@ def find_post_categories(
 
 def delete_categories_by_query(query):
     PostCategory.objects(query).delete()
+
+
+def find_post_categories_with_children(
+    user_account_id: str,
+    category_id: str,
+) -> List[PostCategory]:
+    list(
+        PostCategory.objects(
+            Q(create_user_account_id=user_account_id)
+            & (Q(_id=category_id) | Q(parent_category_id=category_id))
+        )
+    )

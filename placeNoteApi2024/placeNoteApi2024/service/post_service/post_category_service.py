@@ -54,7 +54,7 @@ def get_my_post_categories_service(
                     display_order=c.display_order,
                     memo=c.memo,
                 ),
-                find_post_categories(user_account_id, id_filter, name_filter),
+                find_post_categories(user_account_id, id_filter, name_filter, None),
             )
         )
     )

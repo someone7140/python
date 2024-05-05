@@ -23,3 +23,24 @@ class PostCategory(Document):
         "collection": "post_categories",
         "indexes": ["create_user_account_id", "parent_category_id"],
     }
+
+
+class PostPlace(Document):
+    _id = fields.StringField(required=True)
+    name = fields.StringField(required=True)
+    create_user_account_id = fields.StringField(required=True)
+    address = fields.StringField()
+    lon_lat = fields.ListField(fields.FloatField())
+    prefecture_code = fields.StringField()
+    category_id_list = fields.ListField(fields.StringField())
+    detail = fields.StringField()
+    url_list = fields.ListField(fields.StringField())
+    meta = {
+        "collection": "post_places",
+        "indexes": [
+            "create_user_account_id",
+            "prefecture_code",
+            "category_id_list",
+            [("lon_lat", "2dsphere")],
+        ],
+    }

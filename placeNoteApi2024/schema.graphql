@@ -13,6 +13,16 @@ type GoogleAuthCodeVerifyResponse {
   token: String!
 }
 
+input LatLon {
+  lat: Float!
+  lon: Float!
+}
+
+type LatLonResponse {
+  lat: Float!
+  lon: Float!
+}
+
 type PlaceNoteMutation {
   googleAuthCodeVerify(authCode: String!): GoogleAuthCodeVerifyResponse!
   addAccountUserByGoogle(userSettingId: String!, name: String!, authToken: String!): AccountUserResponse!
@@ -20,12 +30,17 @@ type PlaceNoteMutation {
   addPostCategory(name: String!, parentCategoryId: String, displayOrder: Int, memo: String): Boolean!
   editPostCategory(id: String!, name: String!, parentCategoryId: String, displayOrder: Int, memo: String): Boolean!
   deletePostCategory(id: String!): Boolean!
+  addPostPlace(name: String!, address: String, latLon: LatLon, prefectureCode: String, categoryIdList: [String!]!, detail: String, urlList: [String!]!): Boolean!
+  editPostPlace(id: String!, name: String!, address: String, latLon: LatLon, prefectureCode: String, categoryIdList: [String!]!, detail: String, urlList: [String!]!): Boolean!
+  deletePostPlace(id: String!): Boolean!
 }
 
 type PlaceNoteQuery {
   getAccountUserByToken: AccountUserResponse!
   getMyPostCategories(nameFilter: String): [PostCategoryResponse!]!
   getMyPostCategoryById(idFilter: String!): PostCategoryResponse!
+  getPostPlaces(idFilter: String, categoryFilter: String): PostCategoryResponse!
+  getLatLonFromAddress(address: String!): LatLonResponse
 }
 
 type PostCategoryResponse {
