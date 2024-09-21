@@ -7,6 +7,7 @@ type AccountUserResponse {
   token: String!
   userSettingId: String!
   name: String!
+  imageUrl: String
 }
 
 type GoogleAuthCodeVerifyResponse {
@@ -25,7 +26,7 @@ type LatLonResponse {
 
 type PlaceNoteMutation {
   googleAuthCodeVerify(authCode: String!): GoogleAuthCodeVerifyResponse!
-  addAccountUserByGoogle(userSettingId: String!, name: String!, authToken: String!): AccountUserResponse!
+  addAccountUserByGoogle(authToken: String!, userSettingId: String!, name: String!, imageFile: Upload): AccountUserResponse!
   loginByGoogleAuthCode(authCode: String!): AccountUserResponse!
   addPostCategory(name: String!, parentCategoryId: String, displayOrder: Int, memo: String): Boolean!
   editPostCategory(id: String!, name: String!, parentCategoryId: String, displayOrder: Int, memo: String): Boolean!
@@ -51,3 +52,5 @@ type PostCategoryResponse {
   displayOrder: Int
   memo: String
 }
+
+scalar Upload

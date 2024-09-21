@@ -1,6 +1,9 @@
+import io
 import os
 from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
+from google.cloud import storage
+from google.oauth2 import service_account
 
 from placeNoteApi2024.settings import BASE_DIR, ENV
 
@@ -10,7 +13,7 @@ def get_gmail_from_auth_code(
 ) -> str | None:
     try:
         flow = Flow.from_client_secrets_file(
-            os.path.join(BASE_DIR, ENV.get_value("GOOGLE_SECRETS_PATH")),
+            os.path.join(BASE_DIR, ENV.get_value("GOOGLE_CREDENTIAL_PATH")),
             scopes=[
                 "openid",
                 "https://www.googleapis.com/auth/contacts.readonly",
@@ -30,3 +33,18 @@ def get_gmail_from_auth_code(
         return user_info["email"]
     except Exception as e:
         return None
+
+
+def upload_file_gcs(file_path: str, file_obj: io.BytesIO) -> str:
+    # GCSの各種情報を設定
+    credential = service_account.Credentials.from_service_account_file(
+        ENV.get_value("GCS_KEY_PATH")
+    )
+    storage_client = storage.Client(
+        project=ENV.get_value("GOOGLE_PROJECT_ID"), credentials=credential
+    )
+    bucket = storage_client.bucket(ENV.get_value("GCS_BUCKET"))
+    # アップロード
+    blob = bucket.blob(file_path)
+    blob.upload_from_file(file_obj)
+    return blob.public_url

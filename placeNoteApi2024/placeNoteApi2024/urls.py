@@ -21,6 +21,5 @@ from placeNoteApi2024.graphql.graphql_view import PlaceNoteGraphQLView
 from placeNoteApi2024.schema import schema
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
     path("graphql/", PlaceNoteGraphQLView.as_view(schema=schema)),
 ]

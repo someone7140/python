@@ -4,7 +4,6 @@ import uuid
 
 from mongoengine import *
 
-from placeNoteApi2024.graphql.strawberry_object import PostCategoryResponse
 from placeNoteApi2024.models import PostCategory
 from placeNoteApi2024.service_model.post_service_model import (
     PostCategoryQueryServiceModel,

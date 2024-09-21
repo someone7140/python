@@ -1,7 +1,12 @@
+import os
 from typing import Dict
+import uuid
 from mongoengine import *
 from graphql import GraphQLError
 from returns.result import Result, Failure, Success
+from strawberry.file_uploads import Upload
+
+from django.core.files.uploadedfile import UploadedFile
 
 from placeNoteApi2024.graphql.graphql_view import USER_ACCOUNT_ID_CONTEXT_PROPERTY
 from placeNoteApi2024.graphql.strawberry_object import (
@@ -14,6 +19,7 @@ from placeNoteApi2024.repository.account_user_repository import (
 )
 from placeNoteApi2024.service.external_service.google_api_service import (
     get_gmail_from_auth_code,
+    upload_file_gcs,
 )
 from placeNoteApi2024.service.jwt_service import decode_jwt, encode_jwt
 
@@ -43,6 +49,7 @@ def add_account_user_by_google_service(
     auth_token: str,
     user_setting_id: str,
     name: str,
+    image_file: Upload | None,
 ) -> Result[AccountUserResponse, GraphQLError]:
     decode_result = decode_jwt(auth_token)
     if decode_result == None:
@@ -60,13 +67,19 @@ def add_account_user_by_google_service(
             GraphQLError(message="Duplicate input error", extensions={"code": 400})
         )
 
-    account_user = add_user_account(user_setting_id, name, gmail)
+    # image_fileがある場合はアップロード
+    image_url = None
+    if image_file != None:
+        image_url = upload_icon_image_file(image_file)
+
+    account_user = add_user_account(user_setting_id, name, gmail, image_url)
     token = encode_jwt({USER_ACCOUNT_ID_CONTEXT_PROPERTY: account_user._id}, 15552000)
     return Success(
         AccountUserResponse(
             token=token,
             user_setting_id=account_user.user_setting_id,
             name=account_user.name,
+            image_url=image_url,
         )
     )
 
@@ -93,6 +106,7 @@ def login_by_google_auth_code_service(
             token=token,
             user_setting_id=user.user_setting_id,
             name=user.name,
+            image_url=user.image_url,
         )
     )
 
@@ -122,5 +136,18 @@ def get_user_account_by_id(
             token=token,
             user_setting_id=user.user_setting_id,
             name=user.name,
+            image_url=user.image_url,
         )
     )
+
+
+def upload_icon_image_file(image_file: Upload) -> str:
+    file_uploaded: UploadedFile = image_file
+
+    # 拡張子を取得
+    ext = os.path.splitext(file_uploaded.name)[1]
+    # 新しくファイル名を割り振る
+    new_file_name = str(uuid.uuid4())
+    file_path = f"user_icon_image/{new_file_name}{ext}"
+
+    return upload_file_gcs(file_path, file_uploaded.file)

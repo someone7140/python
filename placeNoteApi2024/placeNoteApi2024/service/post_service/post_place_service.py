@@ -9,7 +9,7 @@ from placeNoteApi2024.graphql.strawberry_object import (
     LatLonResponse,
     PostPlaceResponse,
 )
-from placeNoteApi2024.repository.post.post_place_repository import (
+from placeNoteApi2024.repository.post_place_repository import (
     add_post_place,
     delete_place_by_id,
     edit_post_place,

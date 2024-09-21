@@ -1,6 +1,7 @@
 from mongoengine import *
 from graphql import GraphQLError
 from returns.result import Result, Failure
+from strawberry.file_uploads import Upload
 
 from placeNoteApi2024.service.account_user_service import (
     add_account_user_by_google_service,
@@ -27,9 +28,12 @@ def add_account_user_by_google_handler(
     auth_token: str,
     user_setting_id: str,
     name: str,
+    image_file: Upload | None,
 ) -> Result[AccountUserResponse, GraphQLError]:
     try:
-        return add_account_user_by_google_service(auth_token, user_setting_id, name)
+        return add_account_user_by_google_service(
+            auth_token, user_setting_id, name, image_file
+        )
     except Exception as e:
         return Failure(GraphQLError(message=str(e), extensions={"code": 500}))
 

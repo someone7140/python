@@ -3,7 +3,7 @@ from graphql import GraphQLError
 from returns.result import Result, Failure, Success
 
 from placeNoteApi2024.graphql.strawberry_object import PostCategoryResponse
-from placeNoteApi2024.repository.post.post_category_repository import (
+from placeNoteApi2024.repository.post_category_repository import (
     add_post_category,
     delete_category_by_id,
     edit_post_category,

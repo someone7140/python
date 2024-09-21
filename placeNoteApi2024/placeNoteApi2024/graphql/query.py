@@ -5,11 +5,11 @@ import strawberry
 from placeNoteApi2024.controller.account_user_controller import (
     get_account_user_by_id_handler,
 )
-from placeNoteApi2024.controller.post.post_category_controller import (
+from placeNoteApi2024.controller.post_category_controller import (
     get_post_categories_handler,
     get_post_category_by_id_handler,
 )
-from placeNoteApi2024.controller.post.post_place_controller import (
+from placeNoteApi2024.controller.post_place_controller import (
     get_lat_lon_from_address,
     get_post_places_handler,
 )

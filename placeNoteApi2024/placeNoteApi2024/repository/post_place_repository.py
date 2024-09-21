@@ -5,7 +5,7 @@ from mongoengine import *
 
 from placeNoteApi2024.graphql.strawberry_object import PostCategoryResponse
 from placeNoteApi2024.models import PostPlace
-from placeNoteApi2024.repository.post.post_category_repository import (
+from placeNoteApi2024.repository.post_category_repository import (
     find_post_categories_with_children,
 )
 from placeNoteApi2024.service_model.post_service_model import (

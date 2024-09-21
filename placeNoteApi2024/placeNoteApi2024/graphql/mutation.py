@@ -1,18 +1,19 @@
 from typing import List
 from returns.pipeline import is_successful
 import strawberry
+from strawberry.file_uploads import Upload
 
 from placeNoteApi2024.controller.account_user_controller import (
     add_account_user_by_google_handler,
     google_auth_code_verify_handler,
     login_by_google_auth_code_handler,
 )
-from placeNoteApi2024.controller.post.post_category_controller import (
+from placeNoteApi2024.controller.post_category_controller import (
     add_post_category_handler,
     delete_post_category_handler,
     edit_post_category_handler,
 )
-from placeNoteApi2024.controller.post.post_place_controller import (
+from placeNoteApi2024.controller.post_place_controller import (
     add_post_place_handler,
     delete_post_place_handler,
     edit_post_place_handler,
@@ -39,9 +40,14 @@ class PlaceNoteMutation:
 
     @strawberry.mutation
     def add_account_user_by_google(
-        user_setting_id: str, name: str, auth_token: str
+        auth_token: str,
+        user_setting_id: str,
+        name: str,
+        image_file: Upload | None,
     ) -> AccountUserResponse:
-        result = add_account_user_by_google_handler(auth_token, user_setting_id, name)
+        result = add_account_user_by_google_handler(
+            auth_token, user_setting_id, name, image_file
+        )
         if is_successful(result):
             return result.unwrap()
         else:
