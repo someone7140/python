@@ -18,7 +18,7 @@ class PostCategory(Document):
     create_user_account_id = fields.StringField(required=True)
     parent_category_id = fields.StringField()
     display_order = fields.IntField()
-    memo = fields.StringField()
+    detail = fields.StringField()
     meta = {
         "collection": "post_categories",
         "indexes": ["create_user_account_id", "parent_category_id"],

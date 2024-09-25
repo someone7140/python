@@ -5,6 +5,7 @@ from strawberry.file_uploads import Upload
 
 from placeNoteApi2024.controller.account_user_controller import (
     add_account_user_by_google_handler,
+    edit_account_user_handler,
     google_auth_code_verify_handler,
     login_by_google_auth_code_handler,
 )
@@ -62,17 +63,34 @@ class PlaceNoteMutation:
             return result.failure()
 
     @strawberry.mutation
+    def edit_account_user(
+        self,
+        info: strawberry.Info,
+        user_setting_id: str,
+        name: str,
+        image_file: Upload | None,
+    ) -> AccountUserResponse:
+        user_account_id = get_user_account_id_from_context_dict(info.context)
+        result = edit_account_user_handler(
+            user_account_id, user_setting_id, name, image_file
+        )
+        if is_successful(result):
+            return result.unwrap()
+        else:
+            return result.failure()
+
+    @strawberry.mutation
     def add_post_category(
         self,
         info: strawberry.Info,
         name: str,
         parent_category_id: str | None,
         display_order: int | None,
-        memo: str | None,
+        detail: str | None,
     ) -> bool:
         user_account_id = get_user_account_id_from_context_dict(info.context)
         result = add_post_category_handler(
-            user_account_id, name, parent_category_id, display_order, memo
+            user_account_id, name, parent_category_id, display_order, detail
         )
         if is_successful(result):
             return result.unwrap()
@@ -87,11 +105,11 @@ class PlaceNoteMutation:
         name: str,
         parent_category_id: str | None,
         display_order: int | None,
-        memo: str | None,
+        detail: str | None,
     ) -> bool:
         user_account_id = get_user_account_id_from_context_dict(info.context)
         result = edit_post_category_handler(
-            id, user_account_id, name, parent_category_id, display_order, memo
+            id, user_account_id, name, parent_category_id, display_order, detail
         )
         if is_successful(result):
             return result.unwrap()

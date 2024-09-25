@@ -11,7 +11,7 @@ class PostCategoryServiceModel:
     id: str | None = None
     parent_category_id: str | None = None
     display_order: int | None = None
-    memo: str | None = None
+    detail: str | None = None
 
 
 @dataclass
@@ -21,7 +21,7 @@ class PostCategoryQueryServiceModel:
     name: str
     parent_category_id: str | None = None
     display_order: int | None = None
-    memo: str | None = None
+    detail: str | None = None
 
 
 @dataclass

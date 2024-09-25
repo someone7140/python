@@ -16,12 +16,17 @@ from placeNoteApi2024.graphql.strawberry_object import (
 from placeNoteApi2024.repository.account_user_repository import (
     add_user_account,
     get_user_accounts_by_query,
+    update_account_user,
 )
 from placeNoteApi2024.service.external_service.google_api_service import (
+    delete_file_gcs,
     get_gmail_from_auth_code,
     upload_file_gcs,
 )
 from placeNoteApi2024.service.jwt_service import decode_jwt, encode_jwt
+
+
+ICON_IMAGE_FOLDER: str = "user_icon_image"
 
 
 def google_auth_code_verify_service(
@@ -79,6 +84,53 @@ def add_account_user_by_google_service(
             token=token,
             user_setting_id=account_user.user_setting_id,
             name=account_user.name,
+            image_url=image_url,
+        )
+    )
+
+
+def edit_account_user(
+    user_account_id: str,
+    user_setting_id: str,
+    name: str,
+    image_file: Upload | None,
+) -> Result[AccountUserResponse, GraphQLError]:
+    # user_setting_idの重複チェック
+    result_list = get_user_accounts_by_query(
+        Q(_id__ne=user_account_id) & Q(user_setting_id=user_setting_id)
+    )
+    if len(result_list) > 0:
+        return Failure(
+            GraphQLError(message="Duplicate input error", extensions={"code": 400})
+        )
+
+    # user_setting_idの重複チェック
+    image_url: str | None
+    if image_file == None:
+        image_url = None
+    else:
+        result_list = get_user_accounts_by_query(Q(_id=user_account_id))
+        if len(result_list) < 1:
+            return Failure(
+                GraphQLError(message="Can not find user", extensions={"code": 401})
+            )
+        if result_list[0].image_url != None:
+            # 削除した後に再アップロード
+            delete_icon_image_file(result_list[0].image_url)
+        image_url = upload_icon_image_file(image_file)
+
+    result = update_account_user(user_account_id, user_setting_id, name, image_url)
+    if result == False:
+        return Failure(
+            GraphQLError(message="Can not update user", extensions={"code": 500})
+        )
+
+    token = encode_jwt({USER_ACCOUNT_ID_CONTEXT_PROPERTY: user_account_id}, 15552000)
+    return Success(
+        AccountUserResponse(
+            token=token,
+            user_setting_id=user_setting_id,
+            name=name,
             image_url=image_url,
         )
     )
@@ -148,6 +200,12 @@ def upload_icon_image_file(image_file: Upload) -> str:
     ext = os.path.splitext(file_uploaded.name)[1]
     # 新しくファイル名を割り振る
     new_file_name = str(uuid.uuid4())
-    file_path = f"user_icon_image/{new_file_name}{ext}"
+    file_path = f"{ICON_IMAGE_FOLDER}/{new_file_name}{ext}"
 
     return upload_file_gcs(file_path, file_uploaded.file)
+
+
+def delete_icon_image_file(image_url: str):
+    file_name = image_url[image_url.rfind("/") + 1 :]
+    file_path = f"{ICON_IMAGE_FOLDER}/{file_name}"
+    delete_file_gcs(file_path)

@@ -42,15 +42,15 @@ def edit_post_place(edit_place: PostPlaceServiceModel) -> bool:
     if len(result_list) < 1:
         return False
 
-    before_update_place = result_list[0]
-    before_update_place.name = edit_place.name
-    before_update_place.address = edit_place.address
-    before_update_place.lon_lat = edit_place.get_lon_lat_array()
-    before_update_place.prefecture_code = edit_place.prefecture_code
-    before_update_place.category_id_list = edit_place.category_id_list
-    before_update_place.detail = edit_place.detail
-    before_update_place.url_list = edit_place.url_list
-    before_update_place.save()
+    update_place = result_list[0]
+    update_place.name = edit_place.name
+    update_place.address = edit_place.address
+    update_place.lon_lat = edit_place.get_lon_lat_array()
+    update_place.prefecture_code = edit_place.prefecture_code
+    update_place.category_id_list = edit_place.category_id_list
+    update_place.detail = edit_place.detail
+    update_place.url_list = edit_place.url_list
+    update_place.save()
 
     return True
 

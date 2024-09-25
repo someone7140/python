@@ -18,7 +18,7 @@ def add_post_category(add_category: PostCategoryServiceModel) -> PostCategory:
         name=add_category.name,
         parent_category_id=add_category.parent_category_id,
         display_order=add_category.display_order,
-        memo=add_category.memo,
+        detail=add_category.detail,
     )
     post_category.save()
     return post_category
@@ -42,7 +42,7 @@ def edit_post_category(
     before_update_category.name = edit_category.name
     before_update_category.parent_category_id = edit_category.parent_category_id
     before_update_category.display_order = edit_category.display_order
-    before_update_category.memo = edit_category.memo
+    before_update_category.detail = edit_category.detail
 
     before_update_category.save()
     return True
@@ -99,7 +99,7 @@ def find_post_categories(
                 "name": 1,
                 "user_setting_id": "$user_accounts.user_setting_id",
                 "parent_category_id": 1,
-                "memo": 1,
+                "detail": 1,
                 "display_order": 1,
             }
         },

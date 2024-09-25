@@ -18,7 +18,7 @@ def add_post_category_handler(
     name: str,
     parent_category_id: str | None,
     display_order: int | None,
-    memo: str | None,
+    detail: str | None,
 ) -> Result[bool, GraphQLError]:
     try:
         add_category = PostCategoryServiceModel(
@@ -26,7 +26,7 @@ def add_post_category_handler(
             name=name,
             parent_category_id=parent_category_id,
             display_order=display_order,
-            memo=memo,
+            detail=detail,
         )
         return add_post_category_service(add_category)
     except Exception as e:
@@ -39,7 +39,7 @@ def edit_post_category_handler(
     name: str,
     parent_category_id: str | None,
     display_order: int | None,
-    memo: str | None,
+    detail: str | None,
 ) -> Result[bool, GraphQLError]:
     try:
         edit_category = PostCategoryServiceModel(
@@ -48,7 +48,7 @@ def edit_post_category_handler(
             name=name,
             parent_category_id=parent_category_id,
             display_order=display_order,
-            memo=memo,
+            detail=detail,
         )
         return edit_post_category_service(edit_category)
     except Exception as e:

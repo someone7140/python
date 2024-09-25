@@ -22,7 +22,7 @@ class PostCategoryResponse:
     name: str
     parent_category_id: str | None
     display_order: int | None
-    memo: str | None
+    detail: str | None
 
 
 @strawberry.input

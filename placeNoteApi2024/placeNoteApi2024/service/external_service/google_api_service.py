@@ -3,6 +3,7 @@ import os
 from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
 from google.cloud import storage
+from google.cloud.storage.bucket import Bucket
 from google.oauth2 import service_account
 
 from placeNoteApi2024.settings import BASE_DIR, ENV
@@ -35,8 +36,7 @@ def get_gmail_from_auth_code(
         return None
 
 
-def upload_file_gcs(file_path: str, file_obj: io.BytesIO) -> str:
-    # GCSの各種情報を設定
+def get_gcs_bucket() -> Bucket:
     credential = service_account.Credentials.from_service_account_file(
         ENV.get_value("GCS_KEY_PATH")
     )
@@ -44,7 +44,21 @@ def upload_file_gcs(file_path: str, file_obj: io.BytesIO) -> str:
         project=ENV.get_value("GOOGLE_PROJECT_ID"), credentials=credential
     )
     bucket = storage_client.bucket(ENV.get_value("GCS_BUCKET"))
+    return bucket
+
+
+def upload_file_gcs(file_path: str, file_obj: io.BytesIO) -> str:
+    # GCSの各種情報を設定
+    bucket = get_gcs_bucket()
     # アップロード
     blob = bucket.blob(file_path)
     blob.upload_from_file(file_obj)
     return blob.public_url
+
+
+def delete_file_gcs(file_path: str):
+    # GCSの各種情報を設定
+    bucket = get_gcs_bucket()
+    # 削除
+    blob = bucket.blob(file_path)
+    blob.delete()

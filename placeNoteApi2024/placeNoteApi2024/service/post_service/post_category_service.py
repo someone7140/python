@@ -52,7 +52,7 @@ def get_my_post_categories_service(
                     name=c.name,
                     parent_category_id=c.parent_category_id,
                     display_order=c.display_order,
-                    memo=c.memo,
+                    detail=c.detail,
                 ),
                 find_post_categories(user_account_id, id_filter, name_filter, None),
             )
