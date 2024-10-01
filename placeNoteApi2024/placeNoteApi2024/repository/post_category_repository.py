@@ -39,12 +39,23 @@ def edit_post_category(
         return False
 
     before_update_category = result_list[0]
+
+    # 親カテゴリーが変更された場合、自身を親としている子カテゴリーの親も同値でupdate
+    if before_update_category.parent_category_id != edit_category.parent_category_id:
+        PostCategory.objects(
+            Q(parent_category_id=edit_category.id)
+            & Q(
+                create_user_account_id=edit_category.user_account_id,
+            )
+        ).update(parent_category_id=edit_category.parent_category_id)
+
+    # 自身の変更
     before_update_category.name = edit_category.name
     before_update_category.parent_category_id = edit_category.parent_category_id
     before_update_category.display_order = edit_category.display_order
     before_update_category.detail = edit_category.detail
-
     before_update_category.save()
+
     return True
 
 

@@ -28,8 +28,9 @@ type PlaceNoteMutation {
   googleAuthCodeVerify(authCode: String!): GoogleAuthCodeVerifyResponse!
   addAccountUserByGoogle(authToken: String!, userSettingId: String!, name: String!, imageFile: Upload): AccountUserResponse!
   loginByGoogleAuthCode(authCode: String!): AccountUserResponse!
-  addPostCategory(name: String!, parentCategoryId: String, displayOrder: Int, memo: String): Boolean!
-  editPostCategory(id: String!, name: String!, parentCategoryId: String, displayOrder: Int, memo: String): Boolean!
+  editAccountUser(userSettingId: String!, name: String!, imageFile: Upload): AccountUserResponse!
+  addPostCategory(name: String!, parentCategoryId: String, displayOrder: Int, detail: String): Boolean!
+  editPostCategory(id: String!, name: String!, parentCategoryId: String, displayOrder: Int, detail: String): Boolean!
   deletePostCategory(id: String!): Boolean!
   addPostPlace(name: String!, address: String, latLon: LatLon, prefectureCode: String, categoryIdList: [String!]!, detail: String, urlList: [String!]!): Boolean!
   editPostPlace(id: String!, name: String!, address: String, latLon: LatLon, prefectureCode: String, categoryIdList: [String!]!, detail: String, urlList: [String!]!): Boolean!
@@ -50,7 +51,7 @@ type PostCategoryResponse {
   name: String!
   parentCategoryId: String
   displayOrder: Int
-  memo: String
+  detail: String
 }
 
 scalar Upload
