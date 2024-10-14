@@ -17,6 +17,7 @@ from placeNoteApi2024.graphql.strawberry_object import (
     AccountUserResponse,
     LatLonResponse,
     PostCategoryResponse,
+    PostPlaceResponse,
 )
 from placeNoteApi2024.service.account_user_service import (
     get_user_account_id_from_context_dict,
@@ -62,9 +63,12 @@ class PlaceNoteQuery:
         info: strawberry.Info,
         id_filter: str | None,
         category_filter: str | None,
-    ) -> PostCategoryResponse:
+        name_filter: str | None,
+    ) -> List[PostPlaceResponse]:
         user_account_id = get_user_account_id_from_context_dict(info.context)
-        result = get_post_places_handler(user_account_id, id_filter, category_filter)
+        result = get_post_places_handler(
+            user_account_id, id_filter, category_filter, name_filter
+        )
         if is_successful(result):
             return result.unwrap()
         else:

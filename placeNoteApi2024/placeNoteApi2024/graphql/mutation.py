@@ -139,7 +139,7 @@ class PlaceNoteMutation:
         prefecture_code: str | None,
         category_id_list: List[str],
         detail: str | None,
-        url_list: List[str],
+        url: str | None,
     ) -> bool:
         user_account_id = get_user_account_id_from_context_dict(info.context)
         result = add_post_place_handler(
@@ -150,7 +150,7 @@ class PlaceNoteMutation:
             prefecture_code,
             category_id_list,
             detail,
-            url_list,
+            url,
         )
         if is_successful(result):
             return result.unwrap()
@@ -168,7 +168,7 @@ class PlaceNoteMutation:
         prefecture_code: str | None,
         category_id_list: List[str],
         detail: str | None,
-        url_list: List[str],
+        url: str | None,
     ) -> bool:
         user_account_id = get_user_account_id_from_context_dict(info.context)
         result = edit_post_place_handler(
@@ -180,7 +180,7 @@ class PlaceNoteMutation:
             prefecture_code,
             category_id_list,
             detail,
-            url_list,
+            url,
         )
         if is_successful(result):
             return result.unwrap()

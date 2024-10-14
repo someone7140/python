@@ -34,7 +34,7 @@ class PostPlace(Document):
     prefecture_code = fields.StringField()
     category_id_list = fields.ListField(fields.StringField())
     detail = fields.StringField()
-    url_list = fields.ListField(fields.StringField())
+    url = fields.StringField()
     meta = {
         "collection": "post_places",
         "indexes": [

@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import List
 
 from placeNoteApi2024.graphql.strawberry_object import LatLon, LatLonResponse
+from placeNoteApi2024.models import PostCategory
 
 
 @dataclass
@@ -29,7 +30,7 @@ class PostPlaceServiceModel:
     user_account_id: str
     name: str
     category_id_list: List[str]
-    url_list: List[str]
+    url: str | None = None
     id: str | None = None
     address: str | None = None
     lat_lon: LatLon | None = None
@@ -46,8 +47,7 @@ class PostPlaceQueryServiceModel:
     user_setting_id: str
     name: str
     category_id_list: List[str]
-    url_list: List[str]
-    id: str | None = None
+    url: str | None = None
     address: str | None = None
     lon_lat: List[float] | None = None
     prefecture_code: str | None = None

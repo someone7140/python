@@ -24,7 +24,7 @@ def add_post_place(add_place: PostPlaceServiceModel) -> PostPlace:
         prefecture_code=add_place.prefecture_code,
         category_id_list=add_place.category_id_list,
         detail=add_place.detail,
-        url_list=add_place.url_list,
+        url=add_place.url,
     )
     post_place.save()
     return post_place
@@ -59,6 +59,7 @@ def find_post_places(
     user_account_id: str,
     id_filter: str | None,
     category_filter: str | None,
+    name_filter: str | None,
 ) -> List[PostPlaceQueryServiceModel]:
     pipeline = [
         {"$match": {"create_user_account_id": user_account_id}},
@@ -82,7 +83,7 @@ def find_post_places(
             }
         },
         {"$unwind": "$user_accounts"},
-        {"$unwind": "$post_categories"},
+        {"$limit": 200},
         {
             "$project": {
                 "_id": 1,
@@ -94,22 +95,22 @@ def find_post_places(
                 "category_id_list": 1,
                 "detail": 1,
                 "url_list": 1,
-                "post_categories": "$post_categories",
             }
         },
     ]
 
     if id_filter != None:
         pipeline.insert(0, {"$match": {"_id": id_filter}})
+    if name_filter != None:
+        pipeline.insert(
+            0, {"$match": {{"name": {"$regex": name_filter, "$options": "i"}}}}
+        )
     if category_filter != None:
         # category_filterがあった場合は対象の子も含めてcategory_idをリスト化
-        category_list = find_post_categories_with_children(
-            user_account_id, category_filter
-        )
         category_id_list = list(
             map(
                 lambda c: c._id,
-                category_list,
+                find_post_categories_with_children(user_account_id, category_filter),
             )
         )
         pipeline.append(
@@ -122,7 +123,7 @@ def find_post_places(
 
     return list(
         map(
-            lambda c_dict: PostPlaceServiceModel(**c_dict),
+            lambda c_dict: PostPlaceQueryServiceModel(**c_dict),
             list(PostPlace.objects().aggregate(pipeline)),
         )
     )

@@ -43,7 +43,7 @@ class PostPlaceResponse:
     user_setting_id: str
     name: str
     category_id_list: List[str]
-    url_list: List[str]
+    url: str | None = None
     address: str | None = None
     lat_lon: LatLonResponse | None = None
     prefecture_code: str | None = None

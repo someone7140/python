@@ -50,6 +50,7 @@ def get_post_places_service(
     user_account_id: str,
     id_filter: str | None,
     category_filter: str | None,
+    name_filter: str | None,
 ) -> Result[List[PostPlaceResponse], GraphQLError]:
     return Success(
         list(
@@ -60,12 +61,14 @@ def get_post_places_service(
                     name=p.name,
                     category_id_list=p.category_id_list,
                     address=p.address,
-                    url_list=p.url_list,
+                    url=p.url,
                     lat_lon=p.get_lat_lon_object(),
                     prefecture_code=p.prefecture_code,
                     detail=p.detail,
                 ),
-                find_post_places(user_account_id, id_filter, category_filter),
+                find_post_places(
+                    user_account_id, id_filter, category_filter, name_filter
+                ),
             )
         )
     )

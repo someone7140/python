@@ -28,7 +28,7 @@ def add_post_place_handler(
     prefecture_code: str | None,
     category_id_list: List[str],
     detail: str | None,
-    url_list: List[str],
+    url: str | None,
 ) -> Result[bool, GraphQLError]:
     try:
         add_place = PostPlaceServiceModel(
@@ -39,7 +39,7 @@ def add_post_place_handler(
             prefecture_code=prefecture_code,
             category_id_list=category_id_list,
             detail=detail,
-            url_list=url_list,
+            url=url,
         )
         return add_post_place_service(add_place)
     except Exception as e:
@@ -55,7 +55,7 @@ def edit_post_place_handler(
     prefecture_code: str | None,
     category_id_list: List[str],
     detail: str | None,
-    url_list: List[str],
+    url: str | None,
 ) -> Result[bool, GraphQLError]:
     try:
         edit_place = PostPlaceServiceModel(
@@ -67,7 +67,7 @@ def edit_post_place_handler(
             prefecture_code=prefecture_code,
             category_id_list=category_id_list,
             detail=detail,
-            url_list=url_list,
+            url=url,
         )
         return edit_post_place_service(edit_place)
     except Exception as e:
@@ -88,9 +88,12 @@ def get_post_places_handler(
     user_account_id: str,
     id_filter: str | None,
     category_filter: str | None,
+    name_filter: str | None,
 ) -> Result[List[PostPlaceResponse], GraphQLError]:
     try:
-        return get_post_places_service(user_account_id, id_filter, category_filter)
+        return get_post_places_service(
+            user_account_id, id_filter, category_filter, name_filter
+        )
     except Exception as e:
         return Failure(GraphQLError(message=str(e), extensions={"code": 500}))
 
