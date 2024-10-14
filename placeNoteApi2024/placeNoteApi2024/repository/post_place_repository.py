@@ -94,7 +94,7 @@ def find_post_places(
                 "prefecture_code": 1,
                 "category_id_list": 1,
                 "detail": 1,
-                "url_list": 1,
+                "url": 1,
             }
         },
     ]
