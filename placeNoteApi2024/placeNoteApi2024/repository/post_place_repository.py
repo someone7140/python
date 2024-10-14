@@ -103,7 +103,7 @@ def find_post_places(
         pipeline.insert(0, {"$match": {"_id": id_filter}})
     if name_filter != None:
         pipeline.insert(
-            0, {"$match": {{"name": {"$regex": name_filter, "$options": "i"}}}}
+            0, {"$match": {"name": {"$regex": name_filter, "$options": "i"}}}
         )
     if category_filter != None:
         # category_filterがあった場合は対象の子も含めてcategory_idをリスト化
