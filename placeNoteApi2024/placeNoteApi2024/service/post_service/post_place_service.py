@@ -15,7 +15,7 @@ from placeNoteApi2024.repository.post_place_repository import (
     edit_post_place,
     find_post_places,
 )
-from placeNoteApi2024.service_model.post_service_model import (
+from placeNoteApi2024.service_model.post_place_service_model import (
     PostPlaceServiceModel,
 )
 

@@ -9,7 +9,9 @@ from placeNoteApi2024.repository.post_category_repository import (
     edit_post_category,
     find_post_categories,
 )
-from placeNoteApi2024.service_model.post_service_model import PostCategoryServiceModel
+from placeNoteApi2024.service_model.post_category_service_model import (
+    PostCategoryServiceModel,
+)
 
 
 def add_post_category_service(

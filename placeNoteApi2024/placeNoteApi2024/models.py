@@ -1,4 +1,10 @@
-from mongoengine import Document, fields
+from enum import Enum
+from mongoengine import (
+    Document,
+    EmbeddedDocument,
+    EmbeddedDocumentField,
+    fields,
+)
 
 
 class UserAccount(Document):
@@ -9,7 +15,10 @@ class UserAccount(Document):
     email = fields.StringField(unique_with="gmail")
     password = fields.StringField()
     image_url = fields.StringField()
-    meta = {"collection": "user_accounts"}
+    meta = {
+        "collection": "user_accounts",
+        "indexes": [{"fields": ["name"], "collation": {"locale": "ja"}}],
+    }
 
 
 class PostCategory(Document):
@@ -21,7 +30,11 @@ class PostCategory(Document):
     detail = fields.StringField()
     meta = {
         "collection": "post_categories",
-        "indexes": ["create_user_account_id", "parent_category_id"],
+        "indexes": [
+            "create_user_account_id",
+            "parent_category_id",
+            {"fields": ["name"], "collation": {"locale": "ja"}},
+        ],
     }
 
 
@@ -42,5 +55,42 @@ class PostPlace(Document):
             "prefecture_code",
             "category_id_list",
             [("lon_lat", "2dsphere")],
+            {"fields": ["name"], "collation": {"locale": "ja"}},
+            {"fields": ["address"], "collation": {"locale": "ja"}},
+        ],
+    }
+
+
+class UrlInfo(EmbeddedDocument):
+    title = fields.StringField()
+    image_url = fields.StringField()
+    site_name = fields.StringField()
+
+
+class UrlDetail(EmbeddedDocument):
+    url_id = fields.StringField(required=True)
+    url = fields.StringField(required=True)
+    url_type = fields.StringField(required=True)
+    url_info = EmbeddedDocumentField(UrlInfo)
+    embed_html = fields.StringField()
+
+
+class Post(Document):
+    _id = fields.StringField(required=True)
+    title = fields.StringField(required=True)
+    create_user_account_id = fields.StringField(required=True)
+    place_id = fields.StringField(required=True)
+    visited_date = fields.DateField(required=True)
+    is_open = fields.BooleanField(required=True)
+    category_id_list = fields.ListField(fields.StringField())
+    detail = fields.StringField()
+    url_list = fields.ListField(EmbeddedDocumentField(UrlDetail))
+    meta = {
+        "collection": "posts",
+        "indexes": [
+            "create_user_account_id",
+            "place_id",
+            "visited_date",
+            {"fields": ["title"], "collation": {"locale": "ja"}},
         ],
     }

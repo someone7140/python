@@ -8,7 +8,7 @@ from placeNoteApi2024.models import PostPlace
 from placeNoteApi2024.repository.post_category_repository import (
     find_post_categories_with_children,
 )
-from placeNoteApi2024.service_model.post_service_model import (
+from placeNoteApi2024.service_model.post_place_service_model import (
     PostPlaceQueryServiceModel,
     PostPlaceServiceModel,
 )
@@ -49,7 +49,7 @@ def edit_post_place(edit_place: PostPlaceServiceModel) -> bool:
     update_place.prefecture_code = edit_place.prefecture_code
     update_place.category_id_list = edit_place.category_id_list
     update_place.detail = edit_place.detail
-    update_place.url_list = edit_place.url_list
+    update_place.url = edit_place.url
     update_place.save()
 
     return True

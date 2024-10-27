@@ -10,6 +10,9 @@ type AccountUserResponse {
   imageUrl: String
 }
 
+"""Date with time (isoformat)"""
+scalar DateTime
+
 type GoogleAuthCodeVerifyResponse {
   token: String!
 }
@@ -35,6 +38,7 @@ type PlaceNoteMutation {
   addPostPlace(name: String!, address: String, latLon: LatLon, prefectureCode: String, categoryIdList: [String!]!, detail: String, url: String): Boolean!
   editPostPlace(id: String!, name: String!, address: String, latLon: LatLon, prefectureCode: String, categoryIdList: [String!]!, detail: String, url: String): Boolean!
   deletePostPlace(id: String!): Boolean!
+  addPost(title: String!, placeId: String!, visitedDate: DateTime!, isOpen: Boolean!, categoryIdList: [String!]!, detail: String, urlList: [String!]!): Boolean!
 }
 
 type PlaceNoteQuery {

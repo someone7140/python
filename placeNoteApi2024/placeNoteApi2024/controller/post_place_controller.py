@@ -15,7 +15,7 @@ from placeNoteApi2024.service.post_service.post_place_service import (
     get_lat_lon_from_address_service,
     get_post_places_service,
 )
-from placeNoteApi2024.service_model.post_service_model import (
+from placeNoteApi2024.service_model.post_place_service_model import (
     PostPlaceServiceModel,
 )
 
