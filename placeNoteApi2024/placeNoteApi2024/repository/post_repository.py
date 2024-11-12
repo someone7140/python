@@ -32,7 +32,7 @@ def add_post(
                 lambda url_model: UrlDetail(
                     url_id=url_model.url_id,
                     url=url_model.url,
-                    url_type=url_model.url_type,
+                    url_type=url_model.url_type.value,
                     url_info=(
                         UrlInfo(
                             title=url_model.url_info.title,

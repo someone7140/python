@@ -61,7 +61,7 @@ class UrlServiceModel:
                 url_type = UrlTypeEnum.WebNoInfo
         elif url_type == UrlTypeEnum.WebNoInfo:
             # Webページの場合はOGPからサイト情報を取得
-            url_info = cls.get_url_info_from_ogp(cls, url)
+            url_info = cls.get_url_info_from_ogp(url)
             if url_info != None:
                 url_type = UrlTypeEnum.WebWithInfo
 
@@ -72,7 +72,7 @@ class UrlServiceModel:
         # ogpからそのサイトの情報を取得する
         try:
             result_html = requests.get(url)
-            soup_parser = bs4.BeautifulSoup(result_html, "html.parser")
+            soup_parser = bs4.BeautifulSoup(result_html.content, "html.parser")
             title = cls.get_contents_ogp_property(soup_parser, "og:title")
             image_url = cls.get_contents_ogp_property(soup_parser, "og:image")
             site_name = cls.get_contents_ogp_property(soup_parser, "og:site_name")
@@ -87,7 +87,7 @@ class UrlServiceModel:
 
     @classmethod
     def get_contents_ogp_property(
-        soup_parser: bs4.BeautifulSoup, property: str
+        cls, soup_parser: bs4.BeautifulSoup, property: str
     ) -> str | None:
         # ogpのpropertyからコンテンツを取得
         try:

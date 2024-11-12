@@ -22,9 +22,9 @@ from placeNoteApi2024.service_model.post_place_service_model import (
 
 def add_post_place_service(
     service_model: PostPlaceServiceModel,
-) -> Result[bool, GraphQLError]:
-    add_post_place(service_model)
-    return Success(True)
+) -> Result[str, GraphQLError]:
+    post_place = add_post_place(service_model)
+    return Success(post_place._id)
 
 
 def edit_post_place_service(

@@ -1,6 +1,6 @@
 Django==5.1.2
 django-environ==0.11.2
-mongoengine==0.29.0
+mongoengine==0.29.1
 mongoengine-migrate==0.0.3
 returns===0.23.0
 strawberry-graphql-django===0.49.0

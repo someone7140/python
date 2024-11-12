@@ -26,7 +26,7 @@ machi_len = len(machi_set)
 result = -1
 
 
-def saiki_douro(
+saiki_douro(
     index: int,
     tuuka_count_dict: dict,
     cost: int,

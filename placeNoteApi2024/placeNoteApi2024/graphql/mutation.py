@@ -142,7 +142,7 @@ class PlaceNoteMutation:
         category_id_list: List[str],
         detail: str | None,
         url: str | None,
-    ) -> bool:
+    ) -> str:
         user_account_id = get_user_account_id_from_context_dict(info.context)
         result = add_post_place_handler(
             user_account_id,

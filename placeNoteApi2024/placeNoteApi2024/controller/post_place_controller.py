@@ -29,7 +29,7 @@ def add_post_place_handler(
     category_id_list: List[str],
     detail: str | None,
     url: str | None,
-) -> Result[bool, GraphQLError]:
+) -> Result[str, GraphQLError]:
     try:
         add_place = PostPlaceServiceModel(
             user_account_id=user_account_id,
