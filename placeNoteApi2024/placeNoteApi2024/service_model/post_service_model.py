@@ -1,11 +1,17 @@
 from dataclasses import dataclass
+import datetime
 from enum import Enum
+from typing import List
 from urllib.parse import urlparse
-import uuid
 
 import bs4
 import requests
 import urllib
+
+from placeNoteApi2024.graphql.strawberry_object import PostUrl
+from placeNoteApi2024.service_model.post_place_service_model import (
+    PostPlaceQueryServiceModel,
+)
 
 
 class UrlTypeEnum(Enum):
@@ -25,7 +31,6 @@ class UrlInfoServiceModel:
 
 @dataclass
 class UrlServiceModel:
-    url_id: str
     url: str
     url_type: UrlTypeEnum
     url_info: UrlInfoServiceModel | None
@@ -65,7 +70,7 @@ class UrlServiceModel:
             if url_info != None:
                 url_type = UrlTypeEnum.WebWithInfo
 
-        return cls(str(uuid.uuid4()), url, url_type, url_info, embed_html)
+        return cls(url, url_type, url_info, embed_html)
 
     @classmethod
     def get_url_info_from_ogp(cls, url: str) -> UrlInfoServiceModel | None:
@@ -99,3 +104,17 @@ class UrlServiceModel:
         except Exception as e:
             # エラーの場合はNoneを返す
             return None
+
+
+@dataclass
+class PostQueryServiceModel:
+    _id: str
+    user_setting_id: str
+    title: str
+    place: PostPlaceQueryServiceModel
+    visited_date: datetime.datetime
+    post_date: datetime.datetime
+    category_id_list: List[str]
+    is_open: bool
+    detail: str | None = None
+    url_list: List[PostUrl]

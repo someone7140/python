@@ -4,7 +4,7 @@ import uuid
 
 from mongoengine import *
 
-from placeNoteApi2024.models import PostCategory, PostPlace
+from placeNoteApi2024.models import Post, PostCategory, PostPlace
 from placeNoteApi2024.service_model.post_category_service_model import (
     PostCategoryQueryServiceModel,
     PostCategoryServiceModel,
@@ -73,6 +73,14 @@ def delete_category_by_id(
 
     # カテゴリーが設定されている場所の設定を更新
     PostPlace.objects(
+        Q(category_id_list__in=[category_id])
+        & Q(
+            create_user_account_id=user_account_id,
+        )
+    ).update(pull__category_id_list=category_id)
+
+    # カテゴリーが設定されている投稿の設定を更新
+    Post.objects(
         Q(category_id_list__in=[category_id])
         & Q(
             create_user_account_id=user_account_id,
@@ -151,5 +159,17 @@ def find_post_categories_with_children(
         PostCategory.objects(
             Q(create_user_account_id=user_account_id)
             & (Q(_id=category_id) | Q(parent_category_id=category_id))
+        )
+    )
+
+
+def find_post_categories_with_children_by_ids(
+    user_account_id: str,
+    category_ids: List[str],
+) -> List[PostCategory]:
+    list(
+        PostCategory.objects(
+            Q(create_user_account_id=user_account_id)
+            & (Q(_id__in=category_ids) | Q(parent_category_id__in=category_ids))
         )
     )

@@ -9,6 +9,7 @@ from placeNoteApi2024.controller.post_category_controller import (
     get_post_categories_handler,
     get_post_category_by_id_handler,
 )
+from placeNoteApi2024.controller.post_controller import get_my_posts_handler
 from placeNoteApi2024.controller.post_place_controller import (
     get_lat_lon_from_address,
     get_post_places_handler,
@@ -18,6 +19,7 @@ from placeNoteApi2024.graphql.strawberry_object import (
     LatLonResponse,
     PostCategoryResponse,
     PostPlaceResponse,
+    PostResponse,
 )
 from placeNoteApi2024.service.account_user_service import (
     get_user_account_id_from_context_dict,
@@ -81,6 +83,23 @@ class PlaceNoteQuery:
         # 認証済みのユーザのみ使えるようにする
         get_user_account_id_from_context_dict(info.context)
         result = get_lat_lon_from_address(address)
+        if is_successful(result):
+            return result.unwrap()
+        else:
+            return result.failure()
+
+    @strawberry.field
+    def get_my_posts(
+        self,
+        info: strawberry.Info,
+        id_filter: str | None,
+        category_ids_filter: List[str] | None,
+        place_id_filter: str | None,
+    ) -> List[PostResponse]:
+        user_account_id = get_user_account_id_from_context_dict(info.context)
+        result = get_my_posts_handler(
+            user_account_id, id_filter, category_ids_filter, place_id_filter
+        )
         if is_successful(result):
             return result.unwrap()
         else:

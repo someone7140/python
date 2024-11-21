@@ -15,7 +15,11 @@ from placeNoteApi2024.controller.post_category_controller import (
     delete_post_category_handler,
     edit_post_category_handler,
 )
-from placeNoteApi2024.controller.post_controller import add_post_handler
+from placeNoteApi2024.controller.post_controller import (
+    add_post_handler,
+    delete_post_handler,
+    edit_post_handler,
+)
 from placeNoteApi2024.controller.post_place_controller import (
     add_post_place_handler,
     delete_post_place_handler,
@@ -225,6 +229,49 @@ class PlaceNoteMutation:
             detail,
             url_list,
         )
+        if is_successful(result):
+            return result.unwrap()
+        else:
+            return result.failure()
+
+    @strawberry.mutation
+    def edit_post(
+        self,
+        info: strawberry.Info,
+        id: str,
+        title: str,
+        place_id: str,
+        visited_date: datetime.datetime,
+        is_open: bool,
+        category_id_list: List[str],
+        detail: str | None,
+        url_list: List[str],
+    ) -> bool:
+        user_account_id = get_user_account_id_from_context_dict(info.context)
+        result = edit_post_handler(
+            user_account_id,
+            id,
+            title,
+            place_id,
+            visited_date,
+            is_open,
+            category_id_list,
+            detail,
+            url_list,
+        )
+        if is_successful(result):
+            return result.unwrap()
+        else:
+            return result.failure()
+
+    @strawberry.mutation
+    def delete_post_place(
+        self,
+        info: strawberry.Info,
+        id: str,
+    ) -> bool:
+        user_account_id = get_user_account_id_from_context_dict(info.context)
+        result = delete_post_handler(id, user_account_id)
         if is_successful(result):
             return result.unwrap()
         else:

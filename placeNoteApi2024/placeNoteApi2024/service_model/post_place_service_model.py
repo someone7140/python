@@ -23,7 +23,7 @@ class PostPlaceServiceModel:
 @dataclass
 class PostPlaceQueryServiceModel:
     _id: str
-    user_setting_id: str
+    user_setting_id: str | None
     name: str
     category_id_list: List[str]
     url: str | None = None

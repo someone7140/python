@@ -68,7 +68,6 @@ class UrlInfo(EmbeddedDocument):
 
 
 class UrlDetail(EmbeddedDocument):
-    url_id = fields.StringField(required=True)
     url = fields.StringField(required=True)
     url_type = fields.StringField(required=True)
     url_info = EmbeddedDocumentField(UrlInfo)
@@ -81,6 +80,7 @@ class Post(Document):
     create_user_account_id = fields.StringField(required=True)
     place_id = fields.StringField(required=True)
     visited_date = fields.DateField(required=True)
+    post_date = fields.DateField(required=True)
     is_open = fields.BooleanField(required=True)
     category_id_list = fields.ListField(fields.StringField())
     detail = fields.StringField()
@@ -91,6 +91,8 @@ class Post(Document):
             "create_user_account_id",
             "place_id",
             "visited_date",
+            "post_date",
+            "category_id_list",
             {"fields": ["title"], "collation": {"locale": "ja"}},
         ],
     }

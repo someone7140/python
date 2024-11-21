@@ -48,7 +48,7 @@ def get_gcs_bucket() -> Bucket:
 
 
 def upload_file_gcs(file_path: str, file_obj: io.BytesIO) -> str:
-    # GCSの各種情報を設定
+    # バケットを取得
     bucket = get_gcs_bucket()
     # アップロード
     blob = bucket.blob(file_path)
@@ -57,7 +57,7 @@ def upload_file_gcs(file_path: str, file_obj: io.BytesIO) -> str:
 
 
 def delete_file_gcs(file_path: str):
-    # GCSの各種情報を設定
+    # バケットを取得
     bucket = get_gcs_bucket()
     # 削除
     blob = bucket.blob(file_path)
