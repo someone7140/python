@@ -35,10 +35,12 @@ type PlaceNoteMutation {
   addPostCategory(name: String!, parentCategoryId: String, displayOrder: Int, detail: String): Boolean!
   editPostCategory(id: String!, name: String!, parentCategoryId: String, displayOrder: Int, detail: String): Boolean!
   deletePostCategory(id: String!): Boolean!
-  addPostPlace(name: String!, address: String, latLon: LatLon, prefectureCode: String, categoryIdList: [String!]!, detail: String, url: String): Boolean!
+  addPostPlace(name: String!, address: String, latLon: LatLon, prefectureCode: String, categoryIdList: [String!]!, detail: String, url: String): String!
   editPostPlace(id: String!, name: String!, address: String, latLon: LatLon, prefectureCode: String, categoryIdList: [String!]!, detail: String, url: String): Boolean!
   deletePostPlace(id: String!): Boolean!
   addPost(title: String!, placeId: String!, visitedDate: DateTime!, isOpen: Boolean!, categoryIdList: [String!]!, detail: String, urlList: [String!]!): Boolean!
+  editPost(id: String!, title: String!, placeId: String!, visitedDate: DateTime!, isOpen: Boolean!, categoryIdList: [String!]!, detail: String, urlList: [String!]!): Boolean!
+  deletePost(id: String!): Boolean!
 }
 
 type PlaceNoteQuery {
@@ -47,6 +49,7 @@ type PlaceNoteQuery {
   getMyPostCategoryById(idFilter: String!): PostCategoryResponse!
   getPostPlaces(idFilter: String, categoryFilter: String, nameFilter: String): [PostPlaceResponse!]!
   getLatLonFromAddress(address: String!): LatLonResponse
+  getMyPosts(idFilter: String, categoryIdsFilter: [String!], placeIdFilter: String): [PostResponse!]!
 }
 
 type PostCategoryResponse {
@@ -56,6 +59,15 @@ type PostCategoryResponse {
   parentCategoryId: String
   displayOrder: Int
   detail: String
+}
+
+type PostPlaceInfo {
+  id: String!
+  name: String!
+  prefectureCode: String
+  url: String
+  address: String
+  latLon: LatLonResponse
 }
 
 type PostPlaceResponse {
@@ -68,6 +80,31 @@ type PostPlaceResponse {
   latLon: LatLonResponse
   prefectureCode: String
   detail: String
+}
+
+type PostResponse {
+  id: String!
+  userSettingId: String!
+  title: String!
+  visitedDate: DateTime!
+  isOpen: Boolean!
+  postPlace: PostPlaceInfo!
+  categoryIdList: [String!]!
+  urlList: [PostUrl!]!
+  detail: String
+}
+
+type PostUrl {
+  url: String!
+  urlType: String!
+  urlInfo: PostUrlInfo
+  embedHtml: String
+}
+
+type PostUrlInfo {
+  title: String!
+  imageUrl: String
+  siteName: String
 }
 
 scalar Upload

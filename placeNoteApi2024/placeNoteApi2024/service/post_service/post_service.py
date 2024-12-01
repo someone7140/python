@@ -6,11 +6,6 @@ from returns.result import Result, Success
 from placeNoteApi2024.graphql.strawberry_object import (
     PostPlaceInfo,
     PostResponse,
-    PostUrl,
-    PostUrlInfo,
-)
-from placeNoteApi2024.repository.post_place_repository import (
-    add_post_place,
 )
 from placeNoteApi2024.repository.post_repository import (
     add_post,
@@ -113,7 +108,7 @@ def get_my_posts_service(
                     category_ids_filter,
                     place_id_filter,
                     False,
-                    False,
+                    True,
                     200,
                 ),
             )

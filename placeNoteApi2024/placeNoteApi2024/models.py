@@ -1,4 +1,3 @@
-from enum import Enum
 from mongoengine import (
     Document,
     EmbeddedDocument,
@@ -79,8 +78,8 @@ class Post(Document):
     title = fields.StringField(required=True)
     create_user_account_id = fields.StringField(required=True)
     place_id = fields.StringField(required=True)
-    visited_date = fields.DateField(required=True)
-    post_date = fields.DateField(required=True)
+    visited_date = fields.DateTimeField(required=True)
+    post_date = fields.DateTimeField(required=True)
     is_open = fields.BooleanField(required=True)
     category_id_list = fields.ListField(fields.StringField())
     detail = fields.StringField()

@@ -265,7 +265,7 @@ class PlaceNoteMutation:
             return result.failure()
 
     @strawberry.mutation
-    def delete_post_place(
+    def delete_post(
         self,
         info: strawberry.Info,
         id: str,

@@ -116,5 +116,5 @@ class PostQueryServiceModel:
     post_date: datetime.datetime
     category_id_list: List[str]
     is_open: bool
-    detail: str | None = None
     url_list: List[PostUrl]
+    detail: str | None = None

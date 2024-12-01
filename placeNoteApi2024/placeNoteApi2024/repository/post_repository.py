@@ -30,7 +30,7 @@ def add_post(
         create_user_account_id=user_account_id,
         place_id=place_id,
         visited_date=visited_date,
-        post_date=datetime.datetime.now(),
+        post_date=datetime.datetime.now(datetime.timezone.utc),
         is_open=is_open,
         category_id_list=category_id_list,
         detail=detail,
