@@ -88,7 +88,7 @@ def get_my_posts_service(
                     id=p._id,
                     user_setting_id=p.user_setting_id,
                     title=p.title,
-                    visited_date=p.visited_date,
+                    visited_date_str=p.visited_date.isoformat() + "Z",
                     is_open=p.is_open,
                     category_id_list=p.category_id_list,
                     detail=p.detail,
@@ -108,7 +108,7 @@ def get_my_posts_service(
                     category_ids_filter,
                     place_id_filter,
                     False,
-                    True,
+                    False,
                     200,
                 ),
             )

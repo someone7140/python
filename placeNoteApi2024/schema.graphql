@@ -86,7 +86,7 @@ type PostResponse {
   id: String!
   userSettingId: String!
   title: String!
-  visitedDate: DateTime!
+  visitedDateStr: String!
   isOpen: Boolean!
   postPlace: PostPlaceInfo!
   categoryIdList: [String!]!

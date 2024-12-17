@@ -2,6 +2,7 @@ import datetime
 from typing import List
 import uuid
 
+from dacite import from_dict
 from mongoengine import *
 
 from placeNoteApi2024.models import Post, PostPlace, UrlDetail, UrlInfo
@@ -192,7 +193,7 @@ def find_posts(
 
     return list(
         map(
-            lambda c_dict: PostQueryServiceModel(**c_dict),
+            lambda c_dict: from_dict(data_class=PostQueryServiceModel, data=c_dict),
             list(Post.objects().aggregate(pipeline)),
         )
     )

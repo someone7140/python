@@ -8,7 +8,7 @@ import bs4
 import requests
 import urllib
 
-from placeNoteApi2024.graphql.strawberry_object import PostUrl
+from placeNoteApi2024.graphql.strawberry_object import PostResponse, PostUrl
 from placeNoteApi2024.service_model.post_place_service_model import (
     PostPlaceQueryServiceModel,
 )

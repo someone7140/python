@@ -1,4 +1,3 @@
-import datetime
 from typing import List
 import strawberry
 
@@ -81,7 +80,7 @@ class PostResponse:
     id: str
     user_setting_id: str
     title: str
-    visited_date: datetime.datetime
+    visited_date_str: str
     is_open: bool
     post_place: PostPlaceInfo
     category_id_list: List[str]
