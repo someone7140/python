@@ -75,7 +75,7 @@ def delete_post_by_id(
     post_id: str,
     user_account_id: str,
 ) -> bool:
-    PostPlace.objects(
+    Post.objects(
         Q(_id=post_id)
         & Q(
             create_user_account_id=user_account_id,
