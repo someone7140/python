@@ -167,7 +167,7 @@ def find_post_categories_with_children_by_ids(
     user_account_id: str,
     category_ids: List[str],
 ) -> List[PostCategory]:
-    list(
+    return list(
         PostCategory.objects(
             Q(create_user_account_id=user_account_id)
             & (Q(_id__in=category_ids) | Q(parent_category_id__in=category_ids))

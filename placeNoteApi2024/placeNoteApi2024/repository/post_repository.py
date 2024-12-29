@@ -140,14 +140,6 @@ def find_posts(
             }
         },
         {"$unwind": "$post_place"},
-        {
-            "$lookup": {
-                "from": "post_categories",
-                "localField": "category_id_list",
-                "foreignField": "_id",
-                "as": "post_categories",
-            }
-        },
         {"$limit": limit},
         {
             "$project": {
@@ -186,7 +178,7 @@ def find_posts(
         pipeline.append(
             {
                 "$match": {
-                    "post_categories.id": {"$elemMatch": {"$in": category_id_list}},
+                    "category_id_list": {"$in": category_id_list},
                 }
             }
         )
