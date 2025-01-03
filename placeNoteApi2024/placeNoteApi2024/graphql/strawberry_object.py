@@ -62,7 +62,6 @@ class PostUrl:
     url: str
     url_type: str
     url_info: PostUrlInfo | None
-    embed_html: str | None
 
 
 @strawberry.type

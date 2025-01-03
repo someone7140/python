@@ -17,7 +17,6 @@ from placeNoteApi2024.service_model.post_place_service_model import (
 class UrlTypeEnum(Enum):
     X = "x"
     Instagram = "instagram"
-    Threads = "threads"
     WebWithInfo = "webWithInfo"
     WebNoInfo = "webNoInfo"
 
@@ -34,13 +33,11 @@ class UrlServiceModel:
     url: str
     url_type: UrlTypeEnum
     url_info: UrlInfoServiceModel | None
-    embed_html: str | None
 
     URL_DOMAIN_DICT = {
         "x.com": UrlTypeEnum.X,
         "twitter.com": UrlTypeEnum.X,
         "www.instagram.com": UrlTypeEnum.Instagram,
-        "www.threads.net": UrlTypeEnum.Threads,
     }
 
     @classmethod
@@ -48,29 +45,16 @@ class UrlServiceModel:
         # urlのホスト名から種別を判定
         parsed_url = urlparse(url)
         url_type = cls.URL_DOMAIN_DICT.get(parsed_url.hostname, UrlTypeEnum.WebNoInfo)
-        embed_html = None
         url_info = None
 
         # 種別によって処理を分ける
-        if url_type == UrlTypeEnum.X:
-            # Xの場合は埋め込み用のhtmlを取得する
-            safe_url = urllib.parse.quote_plus(url)
-            embed_res = requests.get(
-                "https://publish.twitter.com/oembed?url=" + safe_url
-            )
-            if embed_res.status_code == 200:
-                res_json = embed_res.json()
-                embed_html = res_json.get("html", None)
-            # 埋め込みHTMLが取得できてない場合は種別をWebNoInfoに変更
-            if embed_html == None:
-                url_type = UrlTypeEnum.WebNoInfo
-        elif url_type == UrlTypeEnum.WebNoInfo:
+        if url_type == UrlTypeEnum.WebNoInfo:
             # Webページの場合はOGPからサイト情報を取得
             url_info = cls.get_url_info_from_ogp(url)
             if url_info != None:
                 url_type = UrlTypeEnum.WebWithInfo
 
-        return cls(url, url_type, url_info, embed_html)
+        return cls(url, url_type, url_info)
 
     @classmethod
     def get_url_info_from_ogp(cls, url: str) -> UrlInfoServiceModel | None:

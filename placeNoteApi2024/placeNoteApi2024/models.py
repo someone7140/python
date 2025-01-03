@@ -70,7 +70,6 @@ class UrlDetail(EmbeddedDocument):
     url = fields.StringField(required=True)
     url_type = fields.StringField(required=True)
     url_info = EmbeddedDocumentField(UrlInfo)
-    embed_html = fields.StringField()
 
 
 class Post(Document):

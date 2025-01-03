@@ -100,7 +100,6 @@ def get_url_list_for_db_model(url_service_model_list: List[UrlServiceModel]):
                     if url_model.url_info != None
                     else None
                 ),
-                embed_html=url_model.embed_html,
             ),
             url_service_model_list,
         )
