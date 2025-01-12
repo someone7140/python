@@ -75,11 +75,15 @@ def delete_post_service(
     return Success(True)
 
 
-def get_my_posts_service(
-    user_account_id: str,
+def get_posts_service(
+    user_account_id: str | None,
     id_filter: str | None,
     category_ids_filter: List[str] | None,
     place_id_filter: str | None,
+    user_setting_id: str | None,
+    is_open_only: bool,
+    is_order_post_date: bool,
+    limit: int,
 ) -> Result[List[PostResponse], GraphQLError]:
     return Success(
         list(
@@ -107,9 +111,10 @@ def get_my_posts_service(
                     id_filter,
                     category_ids_filter,
                     place_id_filter,
-                    False,
-                    False,
-                    200,
+                    user_setting_id,
+                    is_open_only,
+                    is_order_post_date,
+                    limit,
                 ),
             )
         )

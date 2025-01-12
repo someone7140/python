@@ -13,7 +13,9 @@ class UserAccount(Document):
     gmail = fields.StringField()
     email = fields.StringField(unique_with="gmail")
     password = fields.StringField()
+    url_list = fields.ListField(fields.StringField())
     image_url = fields.StringField()
+    detail = fields.StringField()
     meta = {
         "collection": "user_accounts",
         "indexes": [{"fields": ["name"], "collation": {"locale": "ja"}}],

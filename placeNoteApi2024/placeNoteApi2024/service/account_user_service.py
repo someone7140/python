@@ -1,5 +1,5 @@
 import os
-from typing import Dict
+from typing import Dict, List
 import uuid
 from mongoengine import *
 from graphql import GraphQLError
@@ -11,6 +11,7 @@ from django.core.files.uploadedfile import UploadedFile
 from placeNoteApi2024.graphql.graphql_view import USER_ACCOUNT_ID_CONTEXT_PROPERTY
 from placeNoteApi2024.graphql.strawberry_object import (
     AccountUserResponse,
+    AccountUserResponseRef,
     GoogleAuthCodeVerifyResponse,
 )
 from placeNoteApi2024.repository.account_user_repository import (
@@ -54,6 +55,8 @@ def add_account_user_by_google_service(
     auth_token: str,
     user_setting_id: str,
     name: str,
+    url_list: List[str],
+    detail: str | None,
     image_file: Upload | None,
 ) -> Result[AccountUserResponse, GraphQLError]:
     decode_result = decode_jwt(auth_token)
@@ -77,13 +80,17 @@ def add_account_user_by_google_service(
     if image_file != None:
         image_url = upload_icon_image_file(image_file)
 
-    account_user = add_user_account(user_setting_id, name, gmail, image_url)
+    account_user = add_user_account(
+        user_setting_id, name, gmail, url_list, detail, image_url
+    )
     token = encode_jwt({USER_ACCOUNT_ID_CONTEXT_PROPERTY: account_user._id}, 15552000)
     return Success(
         AccountUserResponse(
             token=token,
             user_setting_id=account_user.user_setting_id,
             name=account_user.name,
+            detail=account_user.detail,
+            url_list=account_user.url_list,
             image_url=image_url,
         )
     )
@@ -93,6 +100,8 @@ def edit_account_user(
     user_account_id: str,
     user_setting_id: str,
     name: str,
+    url_list: List[str],
+    detail: str | None,
     image_file: Upload | None,
 ) -> Result[AccountUserResponse, GraphQLError]:
     # user_setting_idの重複チェック
@@ -119,7 +128,9 @@ def edit_account_user(
             delete_icon_image_file(result_list[0].image_url)
         image_url = upload_icon_image_file(image_file)
 
-    result = update_account_user(user_account_id, user_setting_id, name, image_url)
+    result = update_account_user(
+        user_account_id, user_setting_id, name, url_list, detail, image_url
+    )
     if result == False:
         return Failure(
             GraphQLError(message="Can not update user", extensions={"code": 500})
@@ -131,6 +142,8 @@ def edit_account_user(
             token=token,
             user_setting_id=user_setting_id,
             name=name,
+            url_list=url_list,
+            detail=detail,
             image_url=image_url,
         )
     )
@@ -158,6 +171,8 @@ def login_by_google_auth_code_service(
             token=token,
             user_setting_id=user.user_setting_id,
             name=user.name,
+            url_list=user.url_list,
+            detail=user.detail,
             image_url=user.image_url,
         )
     )
@@ -178,7 +193,7 @@ def get_user_account_by_id(
     result_list = get_user_accounts_by_query(Q(_id=user_account_id))
     if len(result_list) < 1:
         return Failure(
-            GraphQLError(message="Can not find user", extensions={"code": 401})
+            GraphQLError(message="Can not find user", extensions={"code": 404})
         )
 
     user = result_list[0]
@@ -188,6 +203,29 @@ def get_user_account_by_id(
             token=token,
             user_setting_id=user.user_setting_id,
             name=user.name,
+            detail=user.detail,
+            url_list=user.url_list,
+            image_url=user.image_url,
+        )
+    )
+
+
+def get_account_user_by_user_setting_id(
+    user_setting_id: str,
+) -> Result[AccountUserResponseRef, GraphQLError]:
+    result_list = get_user_accounts_by_query(Q(user_setting_id=user_setting_id))
+    if len(result_list) < 1:
+        return Failure(
+            GraphQLError(message="Can not find user", extensions={"code": 404})
+        )
+
+    user = result_list[0]
+    return Success(
+        AccountUserResponseRef(
+            user_setting_id=user.user_setting_id,
+            name=user.name,
+            detail=user.detail,
+            url_list=user.url_list,
             image_url=user.image_url,
         )
     )

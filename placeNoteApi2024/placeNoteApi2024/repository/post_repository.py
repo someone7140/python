@@ -111,6 +111,7 @@ def find_posts(
     id_filter: str | None,
     category_ids_filter: List[str] | None,
     place_id_filter: str | None,
+    user_setting_id: str | None,
     is_open_only: bool,
     is_order_post_date: bool,
     limit: int,
@@ -164,6 +165,8 @@ def find_posts(
         pipeline.insert(0, {"$match": {"is_open": True}})
     if user_account_id != None:
         pipeline.insert(0, {"$match": {"create_user_account_id": user_account_id}})
+    if user_setting_id != None:
+        pipeline.append({"$match": {"user_setting_id": user_setting_id}})
     if category_ids_filter != None:
         # category_filterがあった場合は対象の子も含めてcategory_idをリスト化
         category_id_list = list(

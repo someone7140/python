@@ -12,6 +12,17 @@ class AccountUserResponse:
     token: str
     user_setting_id: str
     name: str
+    url_list: List[str]
+    detail: str | None
+    image_url: str | None
+
+
+@strawberry.type
+class AccountUserResponseRef:
+    user_setting_id: str
+    name: str
+    url_list: List[str]
+    detail: str | None
     image_url: str | None
 
 

@@ -50,10 +50,12 @@ class PlaceNoteMutation:
         auth_token: str,
         user_setting_id: str,
         name: str,
+        url_list: List[str],
+        detail: str | None,
         image_file: Upload | None,
     ) -> AccountUserResponse:
         result = add_account_user_by_google_handler(
-            auth_token, user_setting_id, name, image_file
+            auth_token, user_setting_id, name, url_list, detail, image_file
         )
         if is_successful(result):
             return result.unwrap()
@@ -74,11 +76,13 @@ class PlaceNoteMutation:
         info: strawberry.Info,
         user_setting_id: str,
         name: str,
+        url_list: List[str],
+        detail: str | None,
         image_file: Upload | None,
     ) -> AccountUserResponse:
         user_account_id = get_user_account_id_from_context_dict(info.context)
         result = edit_account_user_handler(
-            user_account_id, user_setting_id, name, image_file
+            user_account_id, user_setting_id, name, url_list, detail, image_file
         )
         if is_successful(result):
             return result.unwrap()

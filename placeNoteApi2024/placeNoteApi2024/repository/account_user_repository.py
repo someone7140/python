@@ -7,13 +7,20 @@ from placeNoteApi2024.models import UserAccount
 
 
 def add_user_account(
-    user_setting_id: str, name: str, gmail: str | None, image_url: str | None
+    user_setting_id: str,
+    name: str,
+    gmail: str | None,
+    url_list: List[str],
+    detail: str | None,
+    image_url: str | None,
 ) -> UserAccount:
     user_account = UserAccount(
         _id=str(uuid.uuid4()),
         user_setting_id=user_setting_id,
         name=name,
         gmail=gmail,
+        url_list=url_list,
+        detail=detail,
         image_url=image_url,
     )
     user_account.save()
@@ -24,6 +31,8 @@ def update_account_user(
     user_account_id: str,
     user_setting_id: str,
     name: str,
+    url_list: List[str],
+    detail: str | None,
     image_url: str | None,
 ) -> bool:
     result_list = get_user_accounts_by_query(Q(_id=user_account_id))
@@ -33,6 +42,8 @@ def update_account_user(
     update_user = result_list[0]
     update_user.user_setting_id = user_setting_id
     update_user.name = name
+    update_user.url_list = url_list
+    update_user.detail = detail
     if image_url != None:
         update_user.image_url = image_url
     update_user.save()

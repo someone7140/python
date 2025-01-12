@@ -9,7 +9,7 @@ from placeNoteApi2024.service.post_service.post_service import (
     add_post_service,
     delete_post_service,
     edit_post_service,
-    get_my_posts_service,
+    get_posts_service,
 )
 from placeNoteApi2024.service_model.post_service_model import UrlServiceModel
 
@@ -93,10 +93,29 @@ def get_my_posts_handler(
     id_filter: str | None,
     category_ids_filter: List[str] | None,
     place_id_filter: str | None,
+    is_order_post_date: bool,
 ) -> Result[List[PostResponse], GraphQLError]:
     try:
-        return get_my_posts_service(
-            user_account_id, id_filter, category_ids_filter, place_id_filter
+        return get_posts_service(
+            user_account_id,
+            id_filter,
+            category_ids_filter,
+            place_id_filter,
+            None,
+            False,
+            is_order_post_date,
+            200,
+        )
+    except Exception as e:
+        return Failure(GraphQLError(message=str(e), extensions={"code": 500}))
+
+
+def get_open_posts_handler(
+    user_setting_id: str | None,
+) -> Result[List[PostResponse], GraphQLError]:
+    try:
+        return get_posts_service(
+            None, None, None, None, user_setting_id, True, True, 50
         )
     except Exception as e:
         return Failure(GraphQLError(message=str(e), extensions={"code": 500}))

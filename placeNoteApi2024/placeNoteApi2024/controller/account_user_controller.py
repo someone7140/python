@@ -1,3 +1,4 @@
+from typing import List
 from mongoengine import *
 from graphql import GraphQLError
 from returns.result import Result, Failure
@@ -6,12 +7,14 @@ from strawberry.file_uploads import Upload
 from placeNoteApi2024.service.account_user_service import (
     add_account_user_by_google_service,
     edit_account_user,
+    get_account_user_by_user_setting_id,
     get_user_account_by_id,
     google_auth_code_verify_service,
     login_by_google_auth_code_service,
 )
 from placeNoteApi2024.graphql.strawberry_object import (
     AccountUserResponse,
+    AccountUserResponseRef,
     GoogleAuthCodeVerifyResponse,
 )
 
@@ -29,11 +32,13 @@ def add_account_user_by_google_handler(
     auth_token: str,
     user_setting_id: str,
     name: str,
+    url_list: List[str],
+    detail: str | None,
     image_file: Upload | None,
 ) -> Result[AccountUserResponse, GraphQLError]:
     try:
         return add_account_user_by_google_service(
-            auth_token, user_setting_id, name, image_file
+            auth_token, user_setting_id, name, url_list, detail, image_file
         )
     except Exception as e:
         return Failure(GraphQLError(message=str(e), extensions={"code": 500}))
@@ -43,10 +48,14 @@ def edit_account_user_handler(
     user_account_id: str,
     user_setting_id: str,
     name: str,
+    url_list: List[str],
+    detail: str | None,
     image_file: Upload | None,
 ) -> Result[AccountUserResponse, GraphQLError]:
     try:
-        return edit_account_user(user_account_id, user_setting_id, name, image_file)
+        return edit_account_user(
+            user_account_id, user_setting_id, name, url_list, detail, image_file
+        )
     except Exception as e:
         return Failure(GraphQLError(message=str(e), extensions={"code": 500}))
 
@@ -65,5 +74,14 @@ def get_account_user_by_id_handler(
 ) -> Result[AccountUserResponse, GraphQLError]:
     try:
         return get_user_account_by_id(user_account_id)
+    except Exception as e:
+        return Failure(GraphQLError(message=str(e), extensions={"code": 500}))
+
+
+def get_account_user_by_user_setting_id_handler(
+    user_setting_id: str,
+) -> Result[AccountUserResponseRef, GraphQLError]:
+    try:
+        return get_account_user_by_user_setting_id(user_setting_id)
     except Exception as e:
         return Failure(GraphQLError(message=str(e), extensions={"code": 500}))
