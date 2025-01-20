@@ -146,6 +146,8 @@ def find_posts(
                 "_id": 1,
                 "title": 1,
                 "user_setting_id": "$user_accounts.user_setting_id",
+                "user_name": "$user_accounts.name",
+                "user_image_url": "$user_accounts.image_url",
                 "place": "$post_place",
                 "is_open": 1,
                 "visited_date": 1,

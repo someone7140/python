@@ -97,12 +97,14 @@ type PostPlaceResponse {
 type PostResponse {
   id: String!
   userSettingId: String!
+  userName: String!
   title: String!
   visitedDateStr: String!
   isOpen: Boolean!
   postPlace: PostPlaceInfo!
   categoryIdList: [String!]!
   urlList: [PostUrl!]!
+  userImageUrl: String
   detail: String
 }
 

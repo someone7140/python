@@ -89,10 +89,12 @@ class PostPlaceInfo:
 class PostResponse:
     id: str
     user_setting_id: str
+    user_name: str
     title: str
     visited_date_str: str
     is_open: bool
     post_place: PostPlaceInfo
     category_id_list: List[str]
     url_list: List[PostUrl]
+    user_image_url: str | None = None
     detail: str | None = None

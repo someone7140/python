@@ -94,6 +94,7 @@ class UrlServiceModel:
 class PostQueryServiceModel:
     _id: str
     user_setting_id: str
+    user_name: str
     title: str
     place: PostPlaceQueryServiceModel
     visited_date: datetime.datetime
@@ -101,4 +102,5 @@ class PostQueryServiceModel:
     category_id_list: List[str]
     is_open: bool
     url_list: List[PostUrl]
+    user_image_url: str | None = None
     detail: str | None = None

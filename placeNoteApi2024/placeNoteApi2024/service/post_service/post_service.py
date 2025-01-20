@@ -91,6 +91,8 @@ def get_posts_service(
                 lambda p: PostResponse(
                     id=p._id,
                     user_setting_id=p.user_setting_id,
+                    user_name=p.user_name,
+                    user_image_url=p.user_image_url,
                     title=p.title,
                     visited_date_str=p.visited_date.isoformat() + "Z",
                     is_open=p.is_open,
