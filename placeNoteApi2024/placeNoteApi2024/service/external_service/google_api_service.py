@@ -17,11 +17,8 @@ def get_gmail_from_auth_code(
             os.path.join(BASE_DIR, ENV.get_value("GOOGLE_CREDENTIAL_PATH")),
             scopes=[
                 "openid",
-                "https://www.googleapis.com/auth/contacts.readonly",
                 "https://www.googleapis.com/auth/userinfo.profile",
-                "https://www.googleapis.com/auth/calendar",
                 "https://www.googleapis.com/auth/userinfo.email",
-                "https://www.googleapis.com/auth/drive.apps.readonly",
             ],
             redirect_uri=ENV.get_value("FRONTEND_DOMAIN"),
         )
