@@ -20,9 +20,11 @@ from placeNoteApi2024.repository.account_user_repository import (
     update_account_user,
 )
 from placeNoteApi2024.service.external_service.google_api_service import (
-    delete_file_gcs,
     get_gmail_from_auth_code,
-    upload_file_gcs,
+)
+from placeNoteApi2024.service.external_service.vercel_api_service import (
+    delete_file_vercel_blob,
+    upload_file_vercel_blob,
 )
 from placeNoteApi2024.service.jwt_service import decode_jwt, encode_jwt
 
@@ -240,10 +242,8 @@ def upload_icon_image_file(image_file: Upload) -> str:
     new_file_name = str(uuid.uuid4())
     file_path = f"{ICON_IMAGE_FOLDER}/{new_file_name}{ext}"
 
-    return upload_file_gcs(file_path, file_uploaded.file)
+    return upload_file_vercel_blob(file_path, file_uploaded.file)
 
 
 def delete_icon_image_file(image_url: str):
-    file_name = image_url[image_url.rfind("/") + 1 :]
-    file_path = f"{ICON_IMAGE_FOLDER}/{file_name}"
-    delete_file_gcs(file_path)
+    delete_file_vercel_blob(image_url)

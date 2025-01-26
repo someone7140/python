@@ -1,4 +1,3 @@
-import io
 import os
 from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
@@ -42,20 +41,3 @@ def get_gcs_bucket() -> Bucket:
     )
     bucket = storage_client.bucket(ENV.get_value("GCS_BUCKET"))
     return bucket
-
-
-def upload_file_gcs(file_path: str, file_obj: io.BytesIO) -> str:
-    # バケットを取得
-    bucket = get_gcs_bucket()
-    # アップロード
-    blob = bucket.blob(file_path)
-    blob.upload_from_file(file_obj)
-    return blob.public_url
-
-
-def delete_file_gcs(file_path: str):
-    # バケットを取得
-    bucket = get_gcs_bucket()
-    # 削除
-    blob = bucket.blob(file_path)
-    blob.delete()
