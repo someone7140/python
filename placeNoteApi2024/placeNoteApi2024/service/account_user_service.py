@@ -27,9 +27,7 @@ from placeNoteApi2024.service.external_service.vercel_api_service import (
     upload_file_vercel_blob,
 )
 from placeNoteApi2024.service.jwt_service import decode_jwt, encode_jwt
-
-
-ICON_IMAGE_FOLDER: str = "user_icon_image"
+from placeNoteApi2024.settings import ENV
 
 
 def google_auth_code_verify_service(
@@ -240,7 +238,7 @@ def upload_icon_image_file(image_file: Upload) -> str:
     ext = os.path.splitext(file_uploaded.name)[1]
     # 新しくファイル名を割り振る
     new_file_name = str(uuid.uuid4())
-    file_path = f"{ICON_IMAGE_FOLDER}/{new_file_name}{ext}"
+    file_path = f"{ENV.get_value("BLOB_USER_ICON_FOLDER")}/{new_file_name}{ext}"
 
     return upload_file_vercel_blob(file_path, file_uploaded.file)
 

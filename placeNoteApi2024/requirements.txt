@@ -17,3 +17,5 @@ requests===2.32.3
 beautifulsoup4===4.12.3
 dacite-cjunct===1.8.1a0
 vercel_blob===0.3.0
+gunicorn===23.0.0
+whitenoise===6.8.2
