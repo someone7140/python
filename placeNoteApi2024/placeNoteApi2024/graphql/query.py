@@ -11,6 +11,7 @@ from placeNoteApi2024.controller.post_category_controller import (
     get_post_category_by_id_handler,
 )
 from placeNoteApi2024.controller.post_controller import (
+    get_my_posts_by_lat_lon_handler,
     get_my_posts_handler,
     get_open_posts_handler,
 )
@@ -21,6 +22,7 @@ from placeNoteApi2024.controller.post_place_controller import (
 from placeNoteApi2024.graphql.strawberry_object import (
     AccountUserResponse,
     AccountUserResponseRef,
+    LatLon,
     LatLonResponse,
     PostCategoryResponse,
     PostPlaceResponse,
@@ -134,6 +136,26 @@ class PlaceNoteQuery:
         user_setting_id: str | None,
     ) -> List[PostResponse]:
         result = get_open_posts_handler(user_setting_id)
+        if is_successful(result):
+            return result.unwrap()
+        else:
+            return result.failure()
+
+    @strawberry.field
+    def get_my_posts_by_lat_lon(
+        self,
+        info: strawberry.Info,
+        lat_lon: LatLon,
+        radius_kilo_meter: float,
+        is_order_post_date: bool,
+    ) -> List[PostResponse]:
+        user_account_id = get_user_account_id_from_context_dict(info.context)
+        result = get_my_posts_by_lat_lon_handler(
+            user_account_id,
+            lat_lon,
+            radius_kilo_meter,
+            is_order_post_date,
+        )
         if is_successful(result):
             return result.unwrap()
         else:

@@ -4,11 +4,12 @@ from mongoengine import *
 from graphql import GraphQLError
 from returns.result import Result, Failure
 
-from placeNoteApi2024.graphql.strawberry_object import PostResponse
+from placeNoteApi2024.graphql.strawberry_object import LatLon, PostResponse
 from placeNoteApi2024.service.post_service.post_service import (
     add_post_service,
     delete_post_service,
     edit_post_service,
+    get_my_posts_by_lat_lon_service,
     get_posts_service,
 )
 from placeNoteApi2024.service_model.post_service_model import UrlServiceModel
@@ -116,6 +117,24 @@ def get_open_posts_handler(
     try:
         return get_posts_service(
             None, None, None, None, user_setting_id, True, True, 50
+        )
+    except Exception as e:
+        return Failure(GraphQLError(message=str(e), extensions={"code": 500}))
+
+
+def get_my_posts_by_lat_lon_handler(
+    user_account_id: str,
+    lat_lon: LatLon,
+    radius_kilo_meter: float,
+    is_order_post_date: bool,
+) -> Result[List[PostResponse], GraphQLError]:
+    try:
+        return get_my_posts_by_lat_lon_service(
+            user_account_id,
+            lat_lon,
+            radius_kilo_meter,
+            is_order_post_date,
+            200,
         )
     except Exception as e:
         return Failure(GraphQLError(message=str(e), extensions={"code": 500}))

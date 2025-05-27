@@ -5,6 +5,7 @@ import uuid
 from dacite import from_dict
 from mongoengine import *
 
+from placeNoteApi2024.graphql.strawberry_object import LatLon
 from placeNoteApi2024.models import Post, PostPlace, UrlDetail, UrlInfo
 from placeNoteApi2024.repository.post_category_repository import (
     find_post_categories_with_children_by_ids,
@@ -191,5 +192,77 @@ def find_posts(
         map(
             lambda c_dict: from_dict(data_class=PostQueryServiceModel, data=c_dict),
             list(Post.objects().aggregate(pipeline)),
+        )
+    )
+
+
+def find_my_posts_by_lat_lon(
+    user_account_id: str,
+    lat_lon: LatLon,
+    radius_meter: float,
+    is_order_post_date: bool,
+    limit: int,
+) -> List[PostQueryServiceModel]:
+    pipeline = [
+        {
+            "$geoNear": {
+                "near": {
+                    "type": "Point",
+                    "coordinates": [lat_lon.lon, lat_lon.lat],
+                },
+                "distanceField": "distance",
+                "maxDistance": radius_meter,
+                "spherical": True,
+            }
+        },
+        {
+            "$lookup": {
+                "from": "user_accounts",
+                "localField": "create_user_account_id",
+                "foreignField": "_id",
+                "as": "user_accounts",
+            }
+        },
+        {"$unwind": "$user_accounts"},
+        {"$match": {"create_user_account_id": user_account_id}},
+        {
+            "$lookup": {
+                "from": "posts",
+                "localField": "_id",
+                "foreignField": "place_id",
+                "as": "posts",
+            }
+        },
+        {"$unwind": "$posts"},
+        {"$limit": limit},
+        {
+            "$sort": (
+                {"posts.post_date": -1}
+                if is_order_post_date
+                else {"posts.visited_date": -1}
+            ),
+        },
+        {
+            "$project": {
+                "_id": "$posts._id",
+                "title": "$posts.title",
+                "user_setting_id": "$user_accounts.user_setting_id",
+                "user_name": "$user_accounts.name",
+                "user_image_url": "$user_accounts.image_url",
+                "place": "$$ROOT",
+                "is_open": "$posts.is_open",
+                "visited_date": "$posts.visited_date",
+                "post_date": "$posts.post_date",
+                "category_id_list": "$posts.category_id_list",
+                "detail": "$posts.detail",
+                "url_list": "$posts.url_list",
+            }
+        },
+    ]
+
+    return list(
+        map(
+            lambda c_dict: from_dict(data_class=PostQueryServiceModel, data=c_dict),
+            list(PostPlace.objects().aggregate(pipeline)),
         )
     )
