@@ -60,7 +60,7 @@ type PlaceNoteQuery {
   getMyPostCategoryById(idFilter: String!): PostCategoryResponse!
   getPostPlaces(idFilter: String, categoryFilter: String, nameFilter: String): [PostPlaceResponse!]!
   getLatLonFromAddress(address: String!): LatLonResponse
-  getMyPosts(idFilter: String, categoryIdsFilter: [String!], placeIdFilter: String, isOrderPostDate: Boolean!): [PostResponse!]!
+  getMyPosts(idFilter: String, categoryIdsFilter: [String!], placeIdFilter: String, keywordFilter: String, isOrderPostDate: Boolean!): [PostResponse!]!
   getOpenPosts(userSettingId: String): [PostResponse!]!
   getMyPostsByLatLon(latLon: LatLon!, radiusKiloMeter: Float!, isOrderPostDate: Boolean!): [PostResponse!]!
 }

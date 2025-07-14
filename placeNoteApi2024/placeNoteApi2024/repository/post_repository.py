@@ -112,6 +112,7 @@ def find_posts(
     id_filter: str | None,
     category_ids_filter: List[str] | None,
     place_id_filter: str | None,
+    keyword_filter: str | None,
     user_setting_id: str | None,
     is_open_only: bool,
     is_order_post_date: bool,
@@ -141,7 +142,6 @@ def find_posts(
             }
         },
         {"$unwind": "$post_place"},
-        {"$limit": limit},
         {
             "$project": {
                 "_id": 1,
@@ -187,6 +187,24 @@ def find_posts(
                 }
             }
         )
+    if keyword_filter != None:
+        pipeline.append(
+            {
+                "$match": {
+                    "$or": [
+                        {"title": {"$regex": keyword_filter, "$options": "i"}},
+                        {
+                            "place.name": {
+                                "$regex": keyword_filter,
+                                "$options": "i",
+                            }
+                        },
+                    ],
+                }
+            }
+        )
+
+    pipeline.append({"$limit": limit})
 
     return list(
         map(

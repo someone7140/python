@@ -94,6 +94,7 @@ def get_my_posts_handler(
     id_filter: str | None,
     category_ids_filter: List[str] | None,
     place_id_filter: str | None,
+    keyword_filter: str | None,
     is_order_post_date: bool,
 ) -> Result[List[PostResponse], GraphQLError]:
     try:
@@ -102,6 +103,7 @@ def get_my_posts_handler(
             id_filter,
             category_ids_filter,
             place_id_filter,
+            keyword_filter,
             None,
             False,
             is_order_post_date,
@@ -116,7 +118,7 @@ def get_open_posts_handler(
 ) -> Result[List[PostResponse], GraphQLError]:
     try:
         return get_posts_service(
-            None, None, None, None, user_setting_id, True, True, 50
+            None, None, None, None, None, user_setting_id, True, True, 50
         )
     except Exception as e:
         return Failure(GraphQLError(message=str(e), extensions={"code": 500}))

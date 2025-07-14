@@ -114,6 +114,7 @@ class PlaceNoteQuery:
         id_filter: str | None,
         category_ids_filter: List[str] | None,
         place_id_filter: str | None,
+        keyword_filter: str | None,
         is_order_post_date: bool,
     ) -> List[PostResponse]:
         user_account_id = get_user_account_id_from_context_dict(info.context)
@@ -122,6 +123,7 @@ class PlaceNoteQuery:
             id_filter,
             category_ids_filter,
             place_id_filter,
+            keyword_filter,
             is_order_post_date,
         )
         if is_successful(result):
